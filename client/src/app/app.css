@@ -1,0 +1,20 @@
+  .hero-section {
+    background-image: url('/assets/images/pexels-josh-willink-11499-58572.jpg'); 
+    background-size: cover;
+    background-position: center;
+    color: #fff; 
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    text-align: center;
+}
+
+.hero-title {
+    color: #74282F; 
+}
+
+.hero-text {
+    color: #fff; 
+}
