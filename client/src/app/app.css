@@ -1,5 +1,5 @@
   .hero-section {
-    background-image: url('/assets/images/vows-on-the-move-p0vZplFhKYI-unsplash.jpg'); 
+    background-image: url('/assets/images/chang-duong-Sj0iMtq_Z4w-unsplash.jpg'); 
     background-size: cover;
     background-position: center;
     color: #fff; 
@@ -12,9 +12,14 @@
 }
 
 .hero-title {
-    color: #ffffff; 
+    color: #000000; 
+    margin-bottom: 10px;
 }
 
 .hero-text {
-    color: #fff; 
+    color: #000000; 
+}
+
+.hero-button {
+    margin-top: 10px;
 }
