@@ -3,6 +3,27 @@
     <a class="navbar-brand" routerLink="/">
       <img src="/assets/images/echo_logo_text_white_shadow.png" alt="Echo" width="137" height="40">
     </a>
-    <a routerLink="/auth" class="btn btn-outline-light">Login</a>
+
+    <div *ngIf="user; else loginButton">
+
+      <!-- if login -->
+      <div class="dropdown">
+        <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+          {{ user.displayName || user.email }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><a class="dropdown-item" href="#">Profile</a></li>
+          <li>
+            <hr class="dropdown-divider">
+          </li>
+          <li><a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Logout</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <ng-template #loginButton>
+      <!-- if logout -->
+      <button class="btn btn-outline-light" (click)="loginWithGoogle()">Login</button>
+    </ng-template>
   </div>
 </nav>

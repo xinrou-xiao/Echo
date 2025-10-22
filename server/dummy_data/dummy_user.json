@@ -1,0 +1,117 @@
+[
+    {
+        "email": "emma.johnson@example.com",
+        "uid": "sso_abc123xyz456",
+        "name": "Emma Johnson",
+        "gender": "female",
+        "birthday": "1995-03-15",
+        "location": "New York, NY",
+        "language": "English",
+        "occupation": "Software Engineer",
+        "MBTI": "INTJ",
+        "height": 165,
+        "weight": 52,
+        "interests": [
+            "programming",
+            "reading",
+            "hiking",
+            "photography"
+        ],
+        "bio": "Software engineer who loves exploring new technologies and outdoor activities",
+        "picUrl": "https://example.com/images/emma.jpg",
+        "personality": "Analytical thinker who enjoys solving complex problems",
+        "friends": []
+    },
+    {
+        "email": "michael.smith@example.com",
+        "uid": "sso_def789uvw012",
+        "name": "Michael Smith",
+        "gender": "male",
+        "birthday": "1992-08-22",
+        "location": "Los Angeles, CA",
+        "language": "English, Spanish",
+        "occupation": "Product Manager",
+        "MBTI": "ENFJ",
+        "height": 178,
+        "weight": 70,
+        "interests": [
+            "basketball",
+            "traveling",
+            "cooking",
+            "movies"
+        ],
+        "bio": "Product manager passionate about sports and culinary arts",
+        "picUrl": "https://example.com/images/michael.jpg",
+        "personality": "Outgoing and friendly, great at team collaboration",
+        "friends": []
+    },
+    {
+        "email": "sophia.williams@example.com",
+        "uid": "sso_ghi345rst678",
+        "name": "Sophia Williams",
+        "gender": "female",
+        "birthday": "1998-12-05",
+        "location": "Chicago, IL",
+        "language": "English",
+        "occupation": "Graphic Designer",
+        "MBTI": "ISFP",
+        "height": 160,
+        "weight": 48,
+        "interests": [
+            "drawing",
+            "music",
+            "yoga",
+            "anime"
+        ],
+        "bio": "Creative graphic designer with a passion for art and animation",
+        "picUrl": "https://example.com/images/sophia.jpg",
+        "personality": "Artistic and detail-oriented creative type",
+        "friends": []
+    },
+    {
+        "email": "james.brown@example.com",
+        "uid": "sso_jkl901mno234",
+        "name": "James Brown",
+        "gender": "male",
+        "birthday": "1990-05-30",
+        "location": "Seattle, WA",
+        "language": "English",
+        "occupation": "Data Scientist",
+        "MBTI": "INTP",
+        "height": 175,
+        "weight": 68,
+        "interests": [
+            "data analysis",
+            "chess",
+            "reading",
+            "coffee"
+        ],
+        "bio": "Data scientist with a passion for numbers and patterns",
+        "picUrl": "https://example.com/images/james.jpg",
+        "personality": "Logical analyst who enjoys independent thinking",
+        "friends": []
+    },
+    {
+        "email": "olivia.davis@example.com",
+        "uid": "sso_pqr567stu890",
+        "name": "Olivia Davis",
+        "gender": "female",
+        "birthday": "1993-07-18",
+        "location": "Miami, FL",
+        "language": "English, Spanish",
+        "occupation": "Marketing Specialist",
+        "MBTI": "ESFP",
+        "height": 162,
+        "weight": 50,
+        "interests": [
+            "dancing",
+            "social events",
+            "fashion",
+            "travel"
+        ],
+        "bio": "Energetic marketing specialist who loves socializing and traveling",
+        "picUrl": "https://example.com/images/olivia.jpg",
+        "personality": "Outgoing and lively, enjoys human interaction",
+        "friends": []
+    }
+]
