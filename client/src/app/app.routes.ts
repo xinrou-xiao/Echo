@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { HomePlaceholder } from './pages/home-placeholder/home-placeholder';
 import { AuthPage } from './pages/auth/auth';
+import { ProfilePage } from './pages/profile/profile';
 
 export const routes: Routes = [
   {
@@ -13,5 +14,10 @@ export const routes: Routes = [
     path: 'auth',
     component: AuthPage,
     title: 'Echo · Login or Register'
+  },
+  {
+    path: 'profile',
+    component: ProfilePage,
+    title: 'Echo · Complete Your Profile'
   }
 ];

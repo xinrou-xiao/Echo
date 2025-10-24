@@ -12,7 +12,7 @@
           {{ user.displayName || user.email }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
-          <li><a class="dropdown-item" routerLink="/profile">Profile</a></li>
+          <li><button class="dropdown-item" type="button" (click)="goToProfile()">Profile</button></li>
           <li>
             <hr class="dropdown-divider">
           </li>
