@@ -136,39 +136,32 @@
 
         <label class="field">
           <span class="field-label">Height</span>
-          <select formControlName="height">
+          <!--select formControlName="height">
             <option value="" disabled>Select height</option>
             <option *ngFor="let option of heightOptions" [value]="option">
               {{ option }}
             </option>
-          </select>
+          </select-->
+          <div class="input-group mb-3">
+            <input type="number" class="form-control" aria-label="Height">
+            <span class="input-group-text">cm</span>
+          </div>
           <span class="error" *ngIf="isInvalid('height')">Please select a height.</span>
         </label>
 
         <label class="field">
           <span class="field-label">Weight</span>
-          <select formControlName="weight">
+          <!--select formControlName="weight">
             <option value="" disabled>Select weight</option>
             <option *ngFor="let option of weightOptions" [value]="option">
               {{ option }}
             </option>
-          </select>
+          </select-->
+          <div class="input-group mb-3">
+            <input type="number" class="form-control" aria-label="Weight">
+            <span class="input-group-text">kg</span>
+          </div>
           <span class="error" *ngIf="isInvalid('weight')">Please select a weight.</span>
-        </label>
-
-        <label class="field interests-field">
-          <span class="field-label">Interests</span>
-          <select
-            multiple
-            size="6"
-            formControlName="interests"
-          >
-            <option *ngFor="let option of interestOptions" [ngValue]="option">
-              {{ option }}
-            </option>
-          </select>
-          <span class="helper">Hold Ctrl / Command to select multiple interests.</span>
-          <span class="error" *ngIf="isInvalid('interests')">Please choose at least one interest.</span>
         </label>
 
         <label class="field">
@@ -181,6 +174,39 @@
           </select>
           <span class="error" *ngIf="isInvalid('personality')">Please select a personality highlight.</span>
         </label>
+
+        <!--label class="field interests-field">
+          <span class="field-label">Interests</span>
+          <select
+            multiple
+            size="6"
+            formControlName="interests"
+          >
+            <option *ngFor="let option of interestOptions" [ngValue]="option">
+              {{ option }}
+            </option>
+          </select>
+          <span class="helper">Hold Ctrl / Command to select multiple interests.</span>
+          <span class="error" *ngIf="isInvalid('interests')">Please choose at least one interest.</span>
+        </label-->
+        <div class="interests-block">
+          <label class="form-label">Interests</label>
+
+          <div class="d-flex flex-wrap gap-3">
+            <div *ngFor="let interest of interestOptions; let i = index" class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                [id]="'interest-' + i"
+                [value]="interest"
+              />
+              <label class="form-check-label" [for]="'interest-' + i">
+                {{ interest }}
+              </label>
+            </div>
+          </div>
+        </div>
+        
 
         <label class="field field-full">
           <span class="field-label">Bio</span>
