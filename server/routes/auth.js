@@ -18,7 +18,7 @@ router.post('/verify_user', async (req, res) => {
         if (user) {
             return res.json({
                 success: true,
-                user: user,
+                data: user,
                 isNewUser: false
             });
         } else {
@@ -26,13 +26,14 @@ router.post('/verify_user', async (req, res) => {
                 email: email,
                 uid: uid,
                 name: name,
-                picUrl: photoURL
+                picUrl: photoURL,
+                friends: []
             })
 
             await user.save();
             return res.json({
                 success: true,
-                user: user,
+                data: user,
                 isNewUser: true
             });
         }
@@ -58,7 +59,7 @@ router.get('/user/:uid', async (req, res) => {
 
         res.json({
             success: true,
-            user: user
+            data: user
         })
     } catch (err) {
         console.error('verify_user api error', err);
