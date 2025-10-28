@@ -20,6 +20,9 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/echoDB")
 const authRouter = require('./routes/auth');
 app.use('/api/auth', authRouter);
 
+const userRouter = require('./routes/user');
+app.use('/api/user', userRouter);
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });

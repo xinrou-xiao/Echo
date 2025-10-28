@@ -52,7 +52,7 @@ router.get('/user/:uid', async (req, res) => {
         if (!user) {
             return res.status(404).json({
                 success: false,
-                message: 'user not exists.'
+                message: 'user not found.'
             });
         }
 
