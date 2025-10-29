@@ -1,3 +1,32 @@
+:host {
+  display: block;
+  position: relative;
+}
+
+.home-chat-link {
+  position: absolute;
+  top: 90px;
+  right: 40px;
+  z-index: 2;
+}
+
+.chat-link-button {
+  background: linear-gradient(135deg, #f97316 0%, #f43f5e 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chat-link-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -18px rgba(244, 63, 94, 0.6);
+}
+
 .hero-section {
   background-image: url('/assets/images/chang-duong-Sj0iMtq_Z4w-unsplash.jpg');
   background-size: cover;
