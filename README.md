@@ -6,3 +6,6 @@ To run front end server((in client folder)):
 
 To run backend serve(in root folder):
   npm run dev
+
+To insert dummy data(in server folder):
+  node ./seed.js
