@@ -1,0 +1,62 @@
+<section class="chat-layout">
+  <aside class="chat-sidebar">
+    <h2 class="sidebar-title">Conversations</h2>
+    <ul class="contact-list">
+      <li
+        *ngFor="let contact of contacts"
+        class="contact-item"
+        [class.active]="contact.id === selectedContactId"
+        (click)="selectContact(contact.id)"
+      >
+        <img class="contact-avatar" [src]="contact.avatar" [alt]="contact.name" />
+        <div class="contact-meta">
+          <span class="contact-name">{{ contact.name }}</span>
+          <span class="contact-last-message">{{ contact.lastMessage }}</span>
+        </div>
+        <span class="contact-last-active">{{ contact.lastActive }}</span>
+      </li>
+    </ul>
+    <div class="sidebar-action">
+      <button class="sidebar-action-button" type="button" (click)="goToMatch()">
+        Check Your Match
+      </button>
+    </div>
+  </aside>
+
+  <main class="chat-panel" *ngIf="selectedContact() as contact">
+    <header class="chat-header">
+      <div class="chat-header-meta">
+        <img class="chat-header-avatar" [src]="contact.avatar" [alt]="contact.name" />
+        <div>
+          <h3 class="chat-header-name">{{ contact.name }}</h3>
+          <p class="chat-header-subtitle">Active {{ contact.lastActive }}</p>
+        </div>
+      </div>
+      <button type="button" class="chat-action-button">View Profile</button>
+    </header>
+
+    <div class="chat-messages">
+      <div
+        *ngFor="let message of messagesForSelected()"
+        class="chat-message"
+        [class.from-me]="message.from === 'me'"
+      >
+        <div class="chat-bubble">
+          <p class="chat-text">{{ message.text }}</p>
+          <span class="chat-timestamp">{{ message.timestamp }}</span>
+        </div>
+      </div>
+    </div>
+
+    <form class="chat-composer" (ngSubmit)="sendMessage()">
+      <input
+        type="text"
+        class="chat-input"
+        placeholder="Write a message…"
+        [(ngModel)]="draftMessage"
+        name="draftMessage"
+      />
+      <button class="chat-send-button" type="submit">Send</button>
+    </form>
+  </main>
+</section>

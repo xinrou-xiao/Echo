@@ -1,0 +1,24 @@
+<section class="match-section">
+  <div class="match-card">
+    <img class="match-avatar" [src]="todayMatch.avatar" [alt]="todayMatch.name" />
+    <div class="match-details">
+      <h2 class="match-name">
+        {{ todayMatch.name }}
+      </h2>
+      <p class="match-meta">
+        <span class="match-label">Location</span>
+        <span>{{ todayMatch.location }}</span>
+      </p>
+      <p class="match-meta">
+        <span class="match-label">Gender</span>
+        <span>{{ todayMatch.gender }}</span>
+        <span class="match-label">Age</span>
+        <span>{{ todayMatch.age }}</span>
+      </p>
+      <div class="match-actions">
+        <button class="btn pass-button" type="button" (click)="onPass()">Pass</button>
+        <button class="btn like-button" type="button" (click)="onLike()">Like</button>
+      </div>
+    </div>
+  </div>
+</section>

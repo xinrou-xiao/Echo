@@ -4,26 +4,47 @@
       <img src="/assets/images/echo_logo_text_white_shadow.png" alt="Echo" width="137" height="40">
     </a>
 
-    <div *ngIf="user; else loginButton">
+    <div class="nav-links">
+      <button class="nav-link-button" type="button" routerLink="/match">Match</button>
+      <button class="nav-link-button" type="button" routerLink="/chat">Chat</button>
+    </div>
+
+    <div class="nav-actions" *ngIf="auth.user() as user; else loginButton">
 
       <!-- if login -->
       <div class="dropdown">
         <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-          {{ user.displayName || user.email }}
+          {{ auth.profile()?.name || user.displayName || user.email }}
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
           <li><button class="dropdown-item" type="button" (click)="goToProfile()">Profile</button></li>
           <li>
             <hr class="dropdown-divider">
           </li>
-          <li><a class="dropdown-item" (click)="logout()" style="cursor: pointer;">Logout</a></li>
+          <li>
+            <a
+              class="dropdown-item"
+              (click)="logout()"
+              style="cursor: pointer;"
+            >
+              Logout
+            </a>
+          </li>
         </ul>
       </div>
     </div>
 
     <ng-template #loginButton>
-      <!-- if logout -->
-      <button class="btn btn-outline-light" (click)="loginWithGoogle()">Login</button>
+      <div class="nav-actions">
+        <!-- if logout -->
+        <button
+          class="btn btn-outline-light"
+          data-login-button
+          (click)="login()"
+        >
+          Login
+        </button>
+      </div>
     </ng-template>
   </div>
 </nav>
