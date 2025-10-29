@@ -258,6 +258,14 @@ router.post('/:_id', async (req, res) => {
             picUrl
         } = req.body;
 
+        const userExists = User.exists({ _id: req.params._id });
+        if (!userExists) {
+            return res.status(400).json({
+                success: false,
+                message: 'user do not exist.'
+            });
+        }
+
         const updatedUser = await User.findOneAndUpdate(
             { _id: req.params._id },
             {
