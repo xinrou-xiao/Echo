@@ -5,7 +5,9 @@ type MatchProfile = {
   name: string;
   age: number;
   gender: string;
-  location: string;
+  height: string;
+  weight: string;
+  bio: string;
   avatar: string;
 };
 
@@ -19,17 +21,21 @@ type MatchProfile = {
 export class MatchPage {
   protected readonly todayMatch: MatchProfile = {
     name: 'Alex Johnson',
-    age: 29,
+    age: 28,
     gender: 'Male',
-    location: 'San Francisco, CA',
+    height: '183 cm',
+    weight: '75 kg',
+    bio: 'Outdoor enthusiast, coffee lover, and amateur guitarist looking to share weekend adventures.',
     avatar: 'https://i.pravatar.cc/320?img=12'
   };
 
+  protected decision: 'like' | 'pass' | null = null;
+
   protected onLike(): void {
-    console.log('You liked the match:', this.todayMatch.name);
+    this.decision = 'like';
   }
 
   protected onPass(): void {
-    console.log('You passed on the match:', this.todayMatch.name);
+    this.decision = 'pass';
   }
 }
