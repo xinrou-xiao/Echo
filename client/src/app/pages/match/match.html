@@ -1,7 +1,7 @@
 <section class="match-section py-5">
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+      <div class="col-lg-8 col-xl-6">
         <div class="card match-card border-0">
           <div class="card-body d-flex flex-column align-items-center gap-4">
             <div class="row justify-content-center">
@@ -21,7 +21,7 @@
                 </h2>
               </div>
               <div class="col-12">
-                <div class="row row-cols-1 row-cols-md-4 g-3 match-facts-row">
+                <div class="row row-cols-4 g-3 match-facts-row">
                   <div class="col">
                     <div class="match-meta h-100">
                       <span class="match-label d-block">Gender</span>
@@ -60,10 +60,10 @@
 
             <ng-container *ngIf="!decision; else decisionMessage">
               <div class="row g-3 match-actions">
-                <div class="col-12 col-sm-6 d-grid">
+                <div class="col-6 d-grid">
                   <button class="btn pass-button" type="button" (click)="onPass()">Pass</button>
                 </div>
-                <div class="col-12 col-sm-6 d-grid">
+                <div class="col-6 d-grid">
                   <button class="btn like-button" type="button" (click)="onLike()">Like</button>
                 </div>
               </div>
