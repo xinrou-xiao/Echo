@@ -205,84 +205,24 @@
               </label>
             </div>
           </div>
-        
-        <!-- personal preferences question block -->
-      <div class="field field-full">
-        <section class="profile-section preference-section">
-          <h2>Personal Preferences</h2>
-          <p class="section-hint">These help us understand your vibe better 🌟</p>
+      </div>  
+    <!-- personal preferences question block -->
+    <div class="field field-full">
+      <section class="profile-section preference-section">
+        <h2>Personal Preferences</h2>
+        <p class="section-hint">These help us understand your vibe better 🌟</p>
 
-          <label class="field">
-            <span class="field-label">Go-to Comfort Food</span>
-            <select formControlName="comfortFood">
-              <option value="">Select your comfort food</option>
-              <option>Pizza or pasta</option>
-              <option>Asian</option>
-              <option>Mexican</option>
-              <option>Desserts or baked treats</option>
-              <option>Anything vegetarian or vegan</option>
-            </select>
-          </label>
+        <!-- Add padding between fields -->
+        <label class="field" *ngFor="let question of preferenceQuestions">
+          <span class="field-label">{{ question.label }}</span>
+          <select [formControlName]="question.controlName">
+            <option value="">{{ question.placeholder }}</option>
+            <option *ngFor="let option of question.options">{{ option }}</option>
+          </select>
+        </label>
 
-          <label class="field">
-            <span class="field-label">Your Vibe</span>
-            <select formControlName="vibe">
-              <option value="">Select your vibe</option>
-              <option>Early bird — love slow mornings and sunlight</option>
-              <option>Night owl — creative or focused after dark</option>
-              <option>Depends on the day — flexible with my energy</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">Favorite Music Type</span>
-            <select formControlName="music">
-              <option value="">Select your music type</option>
-              <option>Pop / K-pop</option>
-              <option>Indie / Lo-fi</option>
-              <option>Rock / Metal</option>
-              <option>R&B / Soul</option>
-              <option>Classical / Instrumental</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">Favorite Movie Type</span>
-            <select formControlName="movies">
-              <option value="">Select your favorite movie type</option>
-              <option>Thrillers or mysteries</option>
-              <option>Rom-coms</option>
-              <option>Action or superhero</option>
-              <option>Slice of life or drama</option>
-              <option>Documentaries or true stories</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">Favorite Weather</span>
-            <select formControlName="weather">
-              <option value="">Select your favorite kind</option>
-              <option>Sunny and warm</option>
-              <option>Rainy and cozy</option>
-              <option>Cloudy and calm</option>
-              <option>Cold and crisp</option>
-            </select>
-          </label>
-
-          <label class="field">
-            <span class="field-label">Most Valued Qualities in a Friend/Match</span>
-            <select formControlName="qualities">
-              <option value="">Select one</option>
-              <option>Kindness</option>
-              <option>Humor</option>
-              <option>Honesty</option>
-              <option>Ambition</option>
-              <option>Emotional intelligence</option>
-            </select>
-          </label>
-        </section>
-        </div>
-        </div>
+      </section>
+    </div>
 
         <!-- bio block -->
         <label class="field field-full">
