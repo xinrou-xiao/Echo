@@ -155,7 +155,7 @@ router.get('/friendList/:_id', async (req, res) => {
 /**
  * @swagger
  * /api/user/{_id}:
- *   post:
+ *   put:
  *     summary: update user profile data
  *     description: update user data with given id and profile json
  *     tags: [Users]
@@ -310,7 +310,7 @@ router.put('/:_id', async (req, res) => {
             data: updatedUser
         });
     } catch (err) {
-        console.error("post /:_id error:", err);
+        console.error("put /:_id error:", err);
         return res.status(500).json({
             success: false,
             message: 'server error.'

@@ -7,6 +7,7 @@ const SimilarityScore = require('./models/SimilarityScore');
 const fs = require('fs');
 const path = require('path');
 const Message = require('./models/Message');
+const { MatchingService } = require('./cron/dailyMatch');
 
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 const usersData = JSON.parse(fs.readFileSync(path.join(__dirname, '/dummy_data', 'dummy_user.json'), 'utf8'));
@@ -17,7 +18,8 @@ async function main() {
         await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/echoDB");
         await SimilarityScore.deleteMany();
         const createdUser = await createUser();
-        await createMatchs(createdUser);
+        await MatchingService.generateDailyMatches();
+        // await createMatchs(createdUser);
         await createMessages(createdUser);
     } catch (err) {
         console.error(err.message);

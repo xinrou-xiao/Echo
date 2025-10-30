@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const { specs, swaggerUi } = require('./swagger')
+const { DailyMatchingScheduler } = require('./cron/dailyMatch');
 
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
@@ -16,7 +17,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/echoDB")
-  .then(() => console.log("Mongo connected"))
+  .then(() => {
+    console.log("Mongo connected");
+    DailyMatchingScheduler.init();
+  })
   .catch(err => console.error("mongo connection failed:", err));
 
 const authRouter = require('./routes/auth');

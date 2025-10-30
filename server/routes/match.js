@@ -3,6 +3,132 @@ const router = express.Router();
 const Match = require('../models/Match');
 const { User, TRIGGER_FIELDS } = require('../models/User');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     FilteredUser:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: User ID
+ *         name:
+ *           type: string
+ *           description: User's name
+ *         gender:
+ *           type: string
+ *           enum: [male, female, other]
+ *           description: User's gender
+ *         birthday:
+ *           type: string
+ *           format: date
+ *           description: User's birthday
+ *         height:
+ *           type: number
+ *           description: User's height in cm
+ *         weight:
+ *           type: number
+ *           description: User's weight in kg
+ *         picUrl:
+ *           type: string
+ *           description: URL of user's profile picture
+ *         bio:
+ *           type: string
+ *           description: User's biography
+ *         state:
+ *           type: string
+ *           description: User's state (only included if matches with requesting user)
+ *         city:
+ *           type: string
+ *           description: User's city (only included if state matches with requesting user)
+ *         language:
+ *           type: string
+ *           description: User's language (only included if matches with requesting user)
+ *         occupation:
+ *           type: string
+ *           description: User's occupation (only included if matches with requesting user)
+ *         mbti:
+ *           type: string
+ *           description: User's MBTI personality type (only included if matches with requesting user)
+ *         commonInterests:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: Common interests between users (only included if there are matches)
+ *     MatchResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *         data:
+ *           type: object
+ *           properties:
+ *             matchedUser:
+ *               $ref: '#/components/schemas/FilteredUser'
+ *             match:
+ *               $ref: '#/components/schemas/Match'
+ *     MatchUpdateRequest:
+ *       type: object
+ *       required:
+ *         - response
+ *       properties:
+ *         response:
+ *           type: string
+ *           enum: [like, pass]
+ *           description: User's response to the match
+ */
+
+/**
+ * @swagger
+ * /api/match/{_id}:
+ *   get:
+ *     summary: Get today's match for a user
+ *     description: Retrieve today's matched user with filtered profile information showing only common attributes
+ *     tags: [Matches]
+ *     parameters:
+ *       - in: path
+ *         name: _id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved today's match
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MatchResponse'
+ *       204:
+ *         description: No match found for today
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 message:
+ *                   type: string
+ *                   example: No match for this user.
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: user not found.
+ *       500:
+ *         description: Server error
+ */
 router.get('/:_id', async (req, res) => {
     try {
         const _id = req.params._id;
@@ -89,6 +215,63 @@ router.get('/:_id', async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /api/match/{_id}:
+ *   patch:
+ *     summary: Update user's response to today's match
+ *     description: Submit user's response (like/pass) to today's match and update match result accordingly
+ *     tags: [Matches]
+ *     parameters:
+ *       - in: path
+ *         name: _id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: User ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/MatchUpdateRequest'
+ *           examples:
+ *             likeResponse:
+ *               summary: User likes the match
+ *               value:
+ *                 response: "like"
+ *             passResponse:
+ *               summary: User passes on the match
+ *               value:
+ *                 response: "pass"
+ *     responses:
+ *       200:
+ *         description: Successfully updated match response
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Match'
+ *       404:
+ *         description: User or match not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: User not found or No match for this user.
+ *       500:
+ *         description: Server error
+ */
 router.patch('/:_id', async (req, res) => {
     try {
         const _id = req.params._id;
