@@ -41,6 +41,7 @@
       <div class="card chat-panel">
         <header class="card-header bg-white chat-header d-flex align-items-center justify-content-between">
           <div class="chat-header-meta d-flex align-items-center">
+            <img class="chat-header-avatar" [src]="contact.avatar" [alt]="contact.name" />
             <h3 class="chat-header-name h5 mb-0">{{ contact.name }}</h3>
           </div>
           <button type="button" class="btn chat-action-button">View Profile</button>
