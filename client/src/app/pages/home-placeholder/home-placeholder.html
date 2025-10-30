@@ -1,10 +1,67 @@
-<section class="hero-section">
-  <h1 class="display-5 fw-bold hero-title">Welcome to Echo</h1>
-  <p class="col-md-8 fs-4 mx-auto hero-text">
-    This is the place you can find someone similar to you.
-  </p>
-  <p class="col-md-8 fs-4 mx-auto hero-text">Let your story find its echo.</p>
-  <button class="btn btn-outline-dark hero-button" type="button" (click)="onMatchClick()">
-    Click here to see your today match
-  </button>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <h1 class="hero-title">Welcome to Echo!</h1>
+      <p class="hero-sub">This is the place you can find someone similar to you.</p>
+      <p class="hero-sub">Let your story find its echo...</p>
+
+      <!-- paper plane -->
+      <div class="cta-wrap">
+        <button class="cta-big" type="button" (click)="onMatchClick()">
+          See today’s match
+        </button>
+        <img src="/assets/images/paper-plane.png" alt="" class="plane" aria-hidden="true" />
+      </div>
+    </div>
+
+    <!-- avatar cluster -->
+    <div class="avatar-cluster">
+      <div class="avatar avatar--lg center-left">
+        <img src="/assets/images/avatar-1.png" alt="avatar 1" />
+      </div>
+      <div class="avatar avatar--md top">
+        <img src="/assets/images/avatar-3.png" alt="avatar 3" />
+      </div>
+      <div class="avatar avatar--md right">
+        <img src="/assets/images/avatar-2.png" alt="avatar 2" />
+      </div>
+      <div class="avatar avatar--sm bottom">
+        <img src="/assets/images/avatar-4.png" alt="avatar 4" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+<section class="about">
+  <div class="about-grid">
+    <div class="about-image">
+      <img class="approach-illus" src="/assets/images/ourapproach.png" alt="How Echo works" />
+    </div>
+
+    <div class="about-copy">
+      <h2 class="about-title">Our Approach</h2>
+
+      <p class="about-lead">
+        We’re building matching that feels <span class="hl hl-pink">human</span>, not noisy, one thoughtful intro at a time.
+      </p>
+     <div class="about-points">
+    <div class="point">
+      <h3><span class="hl hl-yellow">One match a day</span></h3>
+      <p>Forget endless swipes. Get one genuine match each day, chosen for quality over quantity.</p>
+    </div>
+
+    <div class="point">
+      <h3><span class="hl hl-blue">Compatibility that matters</span></h3>
+      <p>We match you through shared interests, personality, and what truly clicks.</p>
+    </div>
+
+     <div class="point">
+      <h3><span class="hl hl-peach">Simple and kind</span></h3>
+      <p>All you need is a quick profile, review your match, and connect naturally. No noise, no pressure.</p>
+    </div>
+  </div>
+</div>
+ 
+  </div>
 </section>
