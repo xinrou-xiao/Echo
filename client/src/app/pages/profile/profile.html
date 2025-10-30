@@ -205,9 +205,26 @@
               </label>
             </div>
           </div>
-        </div>
-        
+      </div>  
+    <!-- personal preferences question block -->
+    <div class="field field-full">
+      <section class="profile-section preference-section">
+        <h2>Personal Preferences</h2>
+        <p class="section-hint">These help us understand your vibe better 🌟</p>
 
+        <!-- Add padding between fields -->
+        <label class="field" *ngFor="let question of preferenceQuestions">
+          <span class="field-label">{{ question.label }}</span>
+          <select [formControlName]="question.controlName">
+            <option value="">{{ question.placeholder }}</option>
+            <option *ngFor="let option of question.options">{{ option }}</option>
+          </select>
+        </label>
+
+      </section>
+    </div>
+
+        <!-- bio block -->
         <label class="field field-full">
           <span class="field-label">Bio</span>
           <textarea formControlName="bio" rows="4" maxlength="500" placeholder="Share a short introduction"></textarea>
