@@ -1,0 +1,87 @@
+<section class="match-section py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10 col-lg-8 col-xl-6">
+        <div class="card match-card border-0">
+          <div class="card-body d-flex flex-column align-items-center gap-4">
+            <div class="row justify-content-center">
+              <div class="col-auto">
+                <img
+                  class="match-avatar"
+                  [src]="todayMatch.avatar"
+                  [alt]="todayMatch.name"
+                />
+              </div>
+            </div>
+
+            <div class="row g-4 text-center match-facts justify-content-center">
+              <div class="col-12">
+                <h2 class="match-name mb-0">
+                  {{ todayMatch.name }}
+                </h2>
+              </div>
+              <div class="col-12">
+                <div class="row row-cols-1 row-cols-md-4 g-3 match-facts-row">
+                  <div class="col">
+                    <div class="match-meta h-100">
+                      <span class="match-label d-block">Gender</span>
+                      <span class="match-value">{{ todayMatch.gender }}</span>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="match-meta h-100">
+                      <span class="match-label d-block">Age</span>
+                      <span class="match-value">{{ todayMatch.age }}</span>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="match-meta h-100">
+                      <span class="match-label d-block">Height</span>
+                      <span class="match-value">{{ todayMatch.height }}</span>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="match-meta h-100">
+                      <span class="match-label d-block">Weight</span>
+                      <span class="match-value">{{ todayMatch.weight }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="match-meta match-bio">
+                  <span class="match-label d-block">Bio</span>
+                  <p class="match-bio-text mb-0">
+                    {{ todayMatch.bio }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <ng-container *ngIf="!decision; else decisionMessage">
+              <div class="row g-3 match-actions">
+                <div class="col-12 col-sm-6 d-grid">
+                  <button class="btn pass-button" type="button" (click)="onPass()">Pass</button>
+                </div>
+                <div class="col-12 col-sm-6 d-grid">
+                  <button class="btn like-button" type="button" (click)="onLike()">Like</button>
+                </div>
+              </div>
+            </ng-container>
+
+            <ng-template #decisionMessage>
+              <div class="decision-message text-center">
+                <p class="decision-text mb-0" *ngIf="decision === 'pass'">
+                  You have passed on this match!
+                </p>
+                <p class="decision-text mb-0" *ngIf="decision === 'like'">
+                  You have liked this match!
+                </p>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
