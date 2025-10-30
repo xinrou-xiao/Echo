@@ -1,3 +1,9 @@
+.navbar {
+  min-height: var(--navbar-height);
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
 .navbar-color {
   background-color: #000000;
 }

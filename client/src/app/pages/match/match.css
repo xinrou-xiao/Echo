@@ -15,14 +15,16 @@
 .match-card {
   background-color: #ffffff;
   border-radius: 24px;
+  border: none;
   box-shadow: 0 20px 45px -20px rgba(15, 23, 42, 0.4);
+}
+
+.match-card .card-body {
+  padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  max-width: 480px;
-  width: 100%;
-  padding: 2.5rem 2rem;
   text-align: center;
 }
 
@@ -43,12 +45,15 @@
 
 .match-meta {
   display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
   margin: 0.5rem 0;
   color: #4b5563;
   font-size: 1.05rem;
+  background-color: rgba(226, 232, 240, 0.18);
+  border-radius: 16px;
+  padding: 1rem;
 }
 
 .match-label {
@@ -56,11 +61,43 @@
   color: #111827;
 }
 
-.match-actions {
+.match-value {
+  font-size: 1rem;
+}
+
+.match-bio {
+  background-color: rgba(226, 232, 240, 0.28);
+  padding: 1.25rem 1.5rem;
+}
+
+.match-bio-text {
+  color: #334155;
+}
+
+.match-facts-row .col {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+}
+
+.match-facts-row .col .match-meta {
+  width: 100%;
+}
+
+.match-actions {
   margin-top: 1.5rem;
+}
+
+.decision-message {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: rgba(59, 130, 246, 0.12);
+  border-radius: 18px;
+}
+
+.decision-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1d4ed8;
 }
 
 .btn {
@@ -97,7 +134,7 @@
 }
 
 @media (max-width: 480px) {
-  .match-card {
+  .match-card .card-body {
     padding: 2rem 1.5rem;
   }
 
@@ -106,8 +143,10 @@
     height: 180px;
   }
 
-  .match-actions {
-    flex-direction: column;
+  .match-meta,
+  .match-bio {
+    align-items: flex-start;
+    text-align: left;
   }
 
   .btn {
