@@ -239,6 +239,15 @@ export class ProfilePage {
       validators: Validators.required,
       nonNullable: true
     }),
+
+     /* Personal Preferences */
+    comfortFood: [''],
+    vibe: [''],
+    music: [''],
+    movies: [''],
+    weather: [''],
+    qualities: [''],
+
     bio: ['', [Validators.required, Validators.maxLength(500)]],
     personality: ['', Validators.required],
     picPreference: ['google', Validators.required],
