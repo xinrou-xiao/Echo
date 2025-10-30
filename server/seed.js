@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const User = require('./models/User');
+const { User } = require('./models/User');
 const Messasge = require('./models/Message');
 const Match = require('./models/Match');
+const SimilarityScore = require('./models/SimilarityScore');
 const fs = require('fs');
 const path = require('path');
 const Message = require('./models/Message');
@@ -14,6 +15,7 @@ const messagesData = JSON.parse(fs.readFileSync(path.join(__dirname, '/dummy_dat
 async function main() {
     try {
         await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/echoDB");
+        await SimilarityScore.deleteMany();
         const createdUser = await createUser();
         await createMatchs(createdUser);
         await createMessages(createdUser);
@@ -32,9 +34,9 @@ const createMatchs = async (createdUser) => {
             {
                 user1: createdUser[0],
                 user2: createdUser[1],
-                user1Response: true,
-                user2Response: true,
-                matchResult: true
+                user1Response: "like",
+                user2Response: "like",
+                matchResult: "success"
             }
         );
 
@@ -42,8 +44,6 @@ const createMatchs = async (createdUser) => {
             {
                 user1: createdUser[3],
                 user2: createdUser[4],
-                user1Response: false,
-                user2Response: false
             }
         );
 
@@ -60,8 +60,8 @@ const createMessages = async (createdUser) => {
     try {
         await Message.deleteMany();
 
-        const user1Id = createdUser[0].id;
-        const user2Id = createdUser[1].id;
+        const user1Id = createdUser[0]._id;
+        const user2Id = createdUser[1]._id;
 
         for (let i = 0; i < messagesData.length; i++) {
             let receiverId = user1Id, senderId = user2Id;
@@ -112,13 +112,13 @@ const buildFriendList = async (users) => {
         const user2 = users[1];
 
         await User.findByIdAndUpdate(
-            user1.id,
-            { $set: { friends: [user2.id] } }
+            user1._id,
+            { $set: { friends: [user2._id] } }
         );
 
         await User.findByIdAndUpdate(
-            user2.id,
-            { $set: { friends: [user1.id] } }
+            user2._id,
+            { $set: { friends: [user1._id] } }
         );
         console.log("[buildFriendList] Successfully built friend relationship between frist two dummy users");
     } catch (err) {

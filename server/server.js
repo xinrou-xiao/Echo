@@ -22,10 +22,12 @@ mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/echoDB")
 const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const messageRouter = require('./routes/message');
+const matchRouter = require('./routes/match');
 
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/message', messageRouter);
+app.use('/api/match', matchRouter);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
   explorer: true,
   customCss: '.swagger-ui .topbar { display: none }'

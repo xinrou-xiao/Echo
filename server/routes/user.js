@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
-const { messaging } = require('firebase-admin');
-const { route } = require('./auth');
+const { User } = require('../models/User');
 
 /**
  * @swagger
@@ -153,6 +151,7 @@ router.get('/friendList/:_id', async (req, res) => {
     }
 });
 
+
 /**
  * @swagger
  * /api/user/{_id}:
@@ -239,7 +238,7 @@ router.get('/friendList/:_id', async (req, res) => {
  *               success: false
  *               message: "server error."
  */
-router.post('/:_id', async (req, res) => {
+router.put('/:_id', async (req, res) => {
     try {
         const {
             name,
@@ -296,6 +295,13 @@ router.post('/:_id', async (req, res) => {
             return res.status(404).json({
                 success: false,
                 message: 'user not found.'
+            });
+        }
+        const similarityUpdateResult = await calculateSimilarityScore(req.params._id);
+        if (!similarityUpdateResult) {
+            return res.json({
+                success: true,
+                data: updatedUser
             });
         }
 
