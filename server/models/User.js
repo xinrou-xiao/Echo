@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const SimilarityScore = require('./SimilarityScore');
 
 const userSchema = new mongoose.Schema({
     _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
@@ -7,10 +8,11 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     gender: { type: String, enum: ["male", "female", "other"] },
     birthday: Date,
-    location: String,
+    state: String,
+    city: String,
     language: String,
     occupation: String,
-    MBTI: String,
+    mbti: String,
     height: Number,
     weight: Number,
     interests: { type: [String], default: [] },
@@ -20,4 +22,95 @@ const userSchema = new mongoose.Schema({
     friends: { type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] },
 }, { timestamps: true });
 
-module.exports = mongoose.model("User", userSchema); 
+const TRIGGER_FIELDS = ['state', 'language', 'occupation', 'mbti', 'interests'];
+
+const calculateSimilarityScore = async (_id) => {
+    try {
+        const User = mongoose.model("User");
+
+        const user = await User.findOne({ _id: _id });
+        if (!user) {
+            console.log(`User ${_id} not found`);
+            return false;
+        }
+
+        const otherUsers = await User.find({ _id: { $ne: _id } });
+
+        for (let otherUser of otherUsers) {
+            const userA = user._id < otherUser._id ? user : otherUser;
+            const userB = user._id > otherUser._id ? user : otherUser;
+
+            const compatibility = {};
+
+            TRIGGER_FIELDS.forEach(field => {
+                if (field === 'interests') {
+                    compatibility.commonInterests = userA.interests.filter(interest =>
+                        userB.interests.includes(interest)
+                    );
+                } else {
+                    compatibility[`same${field.charAt(0).toUpperCase() + field.slice(1)}`] =
+                        userA[field] === userB[field];
+                }
+            });
+
+            compatibility.score = Object.values(compatibility).filter(val =>
+                val === true || (Array.isArray(val) && val.length > 0)
+            ).length;
+
+            await SimilarityScore.findOneAndUpdate(
+                {
+                    user1: userA._id,
+                    user2: userB._id
+                },
+                {
+                    score: compatibility.score
+                },
+                {
+                    upsert: true,
+                    new: true,
+                    runValidators: true
+                }
+            );
+        }
+        return true;
+    } catch (err) {
+        console.error(`[calculateSimilarityScore] calculate similarity score for user ${_id} error:`, err);
+        return false;
+    }
+};
+
+userSchema.post('findOneAndUpdate', async function (result) {
+    try {
+        if (!result) return;
+
+        const update = this.getUpdate();
+        const updatedFields = Object.keys(update.$set || {});
+        const ifTrigger = updatedFields.some(field => TRIGGER_FIELDS.includes(field));
+
+        if (ifTrigger) {
+            calculateSimilarityScore(result._id).catch(console.error);
+        }
+    } catch (err) {
+        console.error(`[User] findOneAndUpdate middleware error while processing user ${user._id}:`, err);
+    }
+});
+
+userSchema.post('save', async function (user) {
+    try {
+        const fields = Object.keys(user.$set || {});
+        const ifTrigger = TRIGGER_FIELDS.some(field =>
+            user[field] !== undefined && user[field] !== null
+        );
+
+        if (ifTrigger) {
+            calculateSimilarityScore(user._id).catch(console.error);
+        }
+    } catch (err) {
+        console.error(`[User] save middleware error while processing user ${user._id}:`, err);
+    }
+});
+
+module.exports = {
+    User: mongoose.model("User", userSchema),
+    TRIGGER_FIELDS
+};
