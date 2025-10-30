@@ -297,13 +297,6 @@ router.put('/:_id', async (req, res) => {
                 message: 'user not found.'
             });
         }
-        const similarityUpdateResult = await calculateSimilarityScore(req.params._id);
-        if (!similarityUpdateResult) {
-            return res.json({
-                success: true,
-                data: updatedUser
-            });
-        }
 
         return res.json({
             success: true,

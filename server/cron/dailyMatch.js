@@ -9,9 +9,9 @@ class DailyMatchingScheduler {
         cron.schedule('0 0 * * *', async () => {
             console.log('Daily match cron job triggered at midnight everyday.');
             try {
-                await generateDailyMatches();
+                await MatchingService.generateDailyMatches();
             } catch (err) {
-                console.error('[DailyMatchingScheduler] [init] error:', error)
+                console.error('[DailyMatchingScheduler] [init] error:', err)
             }
         }, {
             scheduled: true,
@@ -69,9 +69,13 @@ class MatchingService {
 
     static async findBestMatchForUser(user, allUsers, matchedUserIds, sevenDaysAgo) {
         try {
+            const userWithFriends = await User.findById(user._id).populate('friends');
+            const friendIds = userWithFriends.friends.map(friend => friend._id.toString());
+
             const availableUsers = allUsers.filter(u =>
                 u._id.toString() !== user._id.toString() &&
-                !matchedUserIds.has(u._id.toString())
+                !matchedUserIds.has(u._id.toString()) &&
+                !friendIds.includes(u._id.toString())
             );
 
             if (availableUsers.length === 0) {

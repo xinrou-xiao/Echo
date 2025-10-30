@@ -305,23 +305,46 @@ router.patch('/:_id', async (req, res) => {
             });
         }
 
-        if (_id == match.user1) {
+        let otherUserId = "";
+        if (_id.toString() === match.user1.toString()) {
             match.user1Response = response;
+            otherUserId = match.user2;
         } else {
             match.user2Response = response;
-        }
-
-        if (match.user1Response == "like" && match.user2Response == "like") {
-            match.matchResult = "success";
-        } else if (response == "pass") {
-            match.matchResult = "failed";
+            otherUserId = match.user1;
         }
 
         await match.save();
 
+        const updatedMatch = await Match.findById(match._id);
+        console.log(updatedMatch);
+        if (updatedMatch.user1Response === "like" && updatedMatch.user2Response === "like") {
+            updatedMatch.matchResult = "success";
+
+            console.log(updatedMatch);
+            await updatedMatch.save();
+
+            const otherUser = await User.findOne({ _id: otherUserId });
+
+            if (!user.friends.includes(otherUserId)) {
+                user.friends.push(otherUserId);
+                await user.save();
+            }
+
+            if (!otherUser.friends.includes(_id)) {
+                otherUser.friends.push(_id);
+                await otherUser.save();
+            }
+
+            console.log(`Users ${_id} and ${otherUserId} became friends!`);
+        } else if (response === "pass") {
+            updatedMatch.matchResult = "failed";
+            await updatedMatch.save();
+        }
+
         return res.json({
             success: true,
-            data: match
+            data: updatedMatch
         });
     } catch (err) {
         console.error("patch /api/match error:", err);
