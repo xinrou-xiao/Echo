@@ -1,21 +1,21 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   min-height: calc(100vh - var(--navbar-height));
   height: calc(100vh - var(--navbar-height));
   background-color: #B5828C;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  overflow: hidden;
 }
 
 section.container {
-  height: 100%;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+  padding-bottom: 0;
 }
 
 section.container > .row {
@@ -32,6 +32,15 @@ section.container > .row > main {
   display: flex;
   flex-direction: column;
   min-height: 0;
+}
+
+.page-footer {
+  margin-top: auto;
+  text-align: center;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.25rem 0 0.1rem;
 }
 
 .chat-sidebar,
