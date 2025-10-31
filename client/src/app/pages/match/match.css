@@ -1,0 +1,155 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #B5828C;
+}
+
+.match-section {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5rem 1.5rem 3rem;
+}
+
+.match-card {
+  background-color: #ffffff;
+  border-radius: 24px;
+  border: none;
+  box-shadow: 0 20px 45px -20px rgba(15, 23, 42, 0.4);
+}
+
+.match-card .card-body {
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.match-avatar {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 16px 30px -18px rgba(244, 63, 94, 0.8);
+}
+
+.match-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.match-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.5rem 0;
+  color: #4b5563;
+  font-size: 1.05rem;
+  background-color: rgba(226, 232, 240, 0.18);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.match-label {
+  font-weight: 600;
+  color: #111827;
+}
+
+.match-value {
+  font-size: 1rem;
+}
+
+.match-bio {
+  background-color: rgba(226, 232, 240, 0.28);
+  padding: 1.25rem 1.5rem;
+}
+
+.match-bio-text {
+  color: #334155;
+}
+
+.match-facts-row .col {
+  display: flex;
+  justify-content: center;
+}
+
+.match-facts-row .col .match-meta {
+  width: 100%;
+}
+
+.match-actions {
+  margin-top: 1.5rem;
+}
+
+.decision-message {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: rgba(59, 130, 246, 0.12);
+  border-radius: 18px;
+}
+
+.decision-text {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1d4ed8;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  border-radius: 999px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 25px -20px rgba(15, 23, 42, 0.45);
+}
+
+.like-button {
+  background: linear-gradient(135deg, #f43f5e 0%, #f97316 100%);
+  color: #ffffff;
+}
+
+.like-button:active {
+  background: linear-gradient(135deg, #e11d48 0%, #ea580c 100%);
+}
+
+.pass-button {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.pass-button:active {
+  background-color: #e2e8f0;
+}
+
+@media (max-width: 480px) {
+  .match-card .card-body {
+    padding: 2rem 1.5rem;
+  }
+
+  .match-avatar {
+    width: 180px;
+    height: 180px;
+  }
+
+  .match-meta,
+  .match-bio {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .btn {
+    width: 100%;
+  }
+}

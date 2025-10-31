@@ -13,14 +13,14 @@
         "height": 165,
         "weight": 52,
         "interests": [
-            "programming",
-            "reading",
-            "hiking",
-            "photography"
+            "Travel",
+            "Dancing",
+            "Reading",
+            "Sports"
         ],
         "bio": "Software engineer who loves exploring new technologies and outdoor activities",
         "picUrl": "https://example.com/images/emma.jpg",
-        "personality": "Analytical thinker who enjoys solving complex problems",
+        "personality": "Ambivert",
         "friends": []
     },
     {
@@ -31,20 +31,20 @@
         "birthday": "1992-08-22",
         "state": "California",
         "city": "Los Angeles",
-        "language": "English, Spanish",
-        "occupation": "Product Manager",
+        "language": "English",
+        "occupation": "Finance Professional",
         "mbti": "ENFJ",
         "height": 178,
         "weight": 70,
         "interests": [
-            "basketball",
-            "traveling",
-            "cooking",
-            "movies"
+            "Sports",
+            "Music",
+            "Photography",
+            "Travel"
         ],
         "bio": "Product manager passionate about sports and culinary arts",
         "picUrl": "https://example.com/images/michael.jpg",
-        "personality": "Outgoing and friendly, great at team collaboration",
+        "personality": "Extrovert",
         "friends": []
     },
     {
@@ -56,19 +56,19 @@
         "state": "Illinois",
         "city": "Chicago",
         "language": "English",
-        "occupation": "Graphic Designer",
+        "occupation": "Consultant",
         "mbti": "ISFP",
         "height": 160,
         "weight": 48,
         "interests": [
-            "drawing",
-            "music",
-            "yoga",
-            "anime"
+            "Art & Design",
+            "Meditation & Mindfulness",
+            "Tech & Gadgets",
+            "Fitness"
         ],
         "bio": "Creative graphic designer with a passion for art and animation",
         "picUrl": "https://example.com/images/sophia.jpg",
-        "personality": "Artistic and detail-oriented creative type",
+        "personality": "Empathetic",
         "friends": []
     },
     {
@@ -85,14 +85,13 @@
         "height": 175,
         "weight": 68,
         "interests": [
-            "data analysis",
-            "chess",
-            "reading",
-            "coffee"
+            "Music",
+            "Gaming",
+            "Movies"
         ],
         "bio": "Data scientist with a passion for numbers and patterns",
         "picUrl": "https://example.com/images/james.jpg",
-        "personality": "Logical analyst who enjoys independent thinking",
+        "personality": "Creative",
         "friends": []
     },
     {
@@ -104,19 +103,19 @@
         "state": "Florida",
         "city": "Miami",
         "language": "English, Spanish",
-        "occupation": "Marketing Specialist",
+        "occupation": "Teacher",
         "mbti": "ESFP",
         "height": 162,
         "weight": 50,
         "interests": [
-            "dancing",
-            "social events",
-            "fashion",
-            "travel"
+            "Reading",
+            "Volunteering",
+            "Outdoors & Hiking",
+            "Cooking"
         ],
         "bio": "Energetic marketing specialist who loves socializing and traveling",
         "picUrl": "https://example.com/images/olivia.jpg",
-        "personality": "Outgoing and lively, enjoys human interaction",
+        "personality": "Strategic Planner",
         "friends": []
     }
 ]

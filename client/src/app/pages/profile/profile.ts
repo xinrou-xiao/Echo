@@ -196,6 +196,79 @@ export class ProfilePage {
     'Empathetic',
     'Strategic Planner'
   ];
+
+  protected readonly preferenceQuestions = [
+  {
+    label: 'Go-to Comfort Food',
+    controlName: 'comfortFood',
+    placeholder: 'Select your comfort food',
+    options: [
+      'Pizza or pasta',
+      'Asian',
+      'Mexican',
+      'Desserts or baked treats',
+      'Anything vegetarian or vegan'
+    ]
+  },
+  {
+    label: 'Your Vibe',
+    controlName: 'vibe',
+    placeholder: 'Select your vibe',
+    options: [
+      'Early bird — love slow mornings and sunlight',
+      'Night owl — creative or focused after dark',
+      'Depends on the day — flexible with my energy'
+    ]
+  },
+  {
+    label: 'Favorite Music Type',
+    controlName: 'music',
+    placeholder: 'Select your music type',
+    options: [
+      'Pop / K-pop',
+      'Indie / Lo-fi',
+      'Rock / Metal',
+      'R&B / Soul',
+      'Classical / Instrumental'
+    ]
+  },
+  {
+    label: 'Favorite Movie Type',
+    controlName: 'movies',
+    placeholder: 'Select your favorite movie type',
+    options: [
+      'Thrillers or mysteries',
+      'Rom-coms',
+      'Action or superhero',
+      'Slice of life or drama',
+      'Documentaries or true stories'
+    ]
+  },
+  {
+    label: 'Favorite Weather',
+    controlName: 'weather',
+    placeholder: 'Select your favorite kind',
+    options: [
+      'Sunny and warm',
+      'Rainy and cozy',
+      'Cloudy and calm',
+      'Cold and crisp'
+    ]
+  },
+  {
+    label: 'Most Valued Qualities in a Friend/Match',
+    controlName: 'qualities',
+    placeholder: 'Select one',
+    options: [
+      'Kindness',
+      'Humor',
+      'Honesty',
+      'Ambition',
+      'Emotional intelligence'
+    ]
+  }
+];
+
   protected readonly picPreferenceOptions = [
     { value: 'google', label: 'Use my Google profile photo' },
     { value: 'upload', label: 'Upload a new profile photo' }
@@ -239,6 +312,15 @@ export class ProfilePage {
       validators: Validators.required,
       nonNullable: true
     }),
+
+     /* Personal Preferences */
+    comfortFood: [''],
+    vibe: [''],
+    music: [''],
+    movies: [''],
+    weather: [''],
+    qualities: [''],
+
     bio: ['', [Validators.required, Validators.maxLength(500)]],
     personality: ['', Validators.required],
     picPreference: ['google', Validators.required],

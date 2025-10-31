@@ -1,14 +1,153 @@
 const express = require('express');
 const router = express.Router();
-const Messasge = require('../models/Message');
+const Message = require('../models/Message');
+const { User } = require('../models/User');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Message:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Message ID
+ *         senderId:
+ *           type: string
+ *           description: ID of the message sender
+ *         receiverId:
+ *           type: string
+ *           description: ID of the message receiver
+ *         content:
+ *           type: string
+ *           description: Message content
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Message creation timestamp
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Message last update timestamp
+ *     GetMessagesRequest:
+ *       type: object
+ *       required:
+ *         - user1Id
+ *         - user2Id
+ *       properties:
+ *         user1Id:
+ *           type: string
+ *           description: First user ID
+ *         user2Id:
+ *           type: string
+ *           description: Second user ID
+ *         page:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *           description: Page number for pagination
+ *         limit:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 20
+ *           description: Number of messages per page
+ *     CreateMessageRequest:
+ *       type: object
+ *       required:
+ *         - senderId
+ *         - receiverId
+ *         - content
+ *       properties:
+ *         senderId:
+ *           type: string
+ *           description: ID of the message sender
+ *         receiverId:
+ *           type: string
+ *           description: ID of the message receiver
+ *         content:
+ *           type: string
+ *           description: Message content
+ *     MessagesResponse:
+ *       type: object
+ *       properties:
+ *         success:
+ *           type: boolean
+ *         data:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Message'
+ */
+
+/**
+ * @swagger
+ * /api/message:
+ *   get:
+ *     summary: Get messages between two users
+ *     description: Retrieve paginated messages between two specified users, sorted by creation time
+ *     tags: [Messages]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GetMessagesRequest'
+ *           examples:
+ *             example1:
+ *               summary: Get first page of messages
+ *               value:
+ *                 user1Id: "507f1f77bcf86cd799439011"
+ *                 user2Id: "507f1f77bcf86cd799439012"
+ *                 page: 1
+ *                 limit: 20
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved messages
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/MessagesResponse'
+ *       400:
+ *         description: Invalid user IDs provided
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: user1 or user2 does not exist.
+ *       404:
+ *         description: No messages found between the users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: false
+ *                 message:
+ *                   type: string
+ *                   example: no messages found for given users.
+ *       500:
+ *         description: Server error
+ */
 router.get('/', async (req, res) => {
     try {
-        const { user1, user2 } = req.body;
+        const { user1Id, user2Id, page = 1, limit = 20 } = req.body;
+        const skip = (page - 1) * limit;
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
         const
 =======
+=======
+>>>>>>> main
         const [user1Exists, user2Exists] = await Promise.all([
             User.exists({ _id: user1Id }),
             User.exists({ _id: user2Id })
@@ -27,7 +166,11 @@ router.get('/', async (req, res) => {
             ]
         }).sort({ createAt: 1 }).skip(skip).limit(limit);
 
+<<<<<<< HEAD
         if (!messages || messages.length == 0) {
+=======
+        if (!messages) {
+>>>>>>> main
             return res.status(404).json({
                 success: false,
                 message: "no messages found for given users."
@@ -38,7 +181,10 @@ router.get('/', async (req, res) => {
             success: true,
             data: messages
         });
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> main
     } catch (err) {
         console.error("get /message error:", err);
         return res.status(500).json({
@@ -46,9 +192,12 @@ router.get('/', async (req, res) => {
             message: 'server error.'
         });
     }
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 });
 =======
+=======
+>>>>>>> main
 });
 
 /**
@@ -72,7 +221,11 @@ router.get('/', async (req, res) => {
  *                 receiverId: "507f1f77bcf86cd799439012"
  *                 content: "Hello! How are you?"
  *     responses:
+<<<<<<< HEAD
  *       200:
+=======
+ *       201:
+>>>>>>> main
  *         description: Message successfully sent
  *         content:
  *           application/json:
@@ -135,5 +288,9 @@ router.post('/', async (req, res) => {
     }
 });
 
+<<<<<<< HEAD
 module.exports = router;
 >>>>>>> Stashed changes
+=======
+module.exports = router;
+>>>>>>> main

@@ -1,0 +1,78 @@
+<section class="container py-4">
+
+  <div class="row g-4">
+    <aside class="col-4">
+
+      <div class="card chat-sidebar">
+        <div class="card-body chat-sidebar-body">
+          <h2 class="sidebar-title h5 mb-3">Conversations</h2>
+
+          <ul class="list-group contact-list">
+            <li
+              *ngFor="let contact of contacts"
+              class="list-group-item border-0 p-0 contact-item"
+              [class.active]="contact.id === selectedContactId"
+              (click)="selectContact(contact.id)"
+            >
+              <img class="contact-avatar" [src]="contact.avatar" [alt]="contact.name" />
+              <div class="contact-meta">
+                <span class="contact-name">{{ contact.name }}</span>
+                <span class="contact-last-message">{{ contact.lastMessage }}</span>
+              </div>
+              <span class="contact-last-active">{{ contact.lastActive }}</span>
+            </li>
+          </ul>
+        </div>
+
+        <footer class="card-footer chat-sidebar-footer">
+          <button
+            class="btn w-100 sidebar-action-button"
+            type="button"
+            (click)="goToMatch()"
+          >
+            Check Your Match
+          </button>
+        </footer>
+      </div>
+    </aside>
+
+    <main class="col-8" *ngIf="selectedContact() as contact">
+
+      <div class="card chat-panel">
+        <header class="card-header bg-white chat-header d-flex align-items-center justify-content-between">
+          <div class="chat-header-meta d-flex align-items-center">
+            <img class="chat-header-avatar" [src]="contact.avatar" [alt]="contact.name" />
+            <h3 class="chat-header-name h5 mb-0">{{ contact.name }}</h3>
+          </div>
+          <button type="button" class="btn chat-action-button">View Profile</button>
+        </header>
+
+        <div class="chat-messages card-body">
+          <div
+            *ngFor="let message of messagesForSelected()"
+            class="chat-message"
+            [class.from-me]="message.from === 'me'"
+          >
+            <div class="chat-bubble">
+              <p class="chat-text mb-0">{{ message.text }}</p>
+              <span class="chat-timestamp">{{ message.timestamp }}</span>
+            </div>
+          </div>
+        </div>
+
+        <form class="chat-composer card-footer" (ngSubmit)="sendMessage()">
+          <div class="input-group">
+            <input
+              type="text"
+              class="form-control chat-input"
+              placeholder="Write a message…"
+              [(ngModel)]="draftMessage"
+              name="draftMessage"
+            />
+            <button class="btn chat-send-button" type="submit">Send</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+</section>

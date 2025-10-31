@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
-const { messaging } = require('firebase-admin');
-const { route } = require('./auth');
+const { User } = require('../models/User');
 
 /**
  * @swagger
@@ -153,10 +151,11 @@ router.get('/friendList/:_id', async (req, res) => {
     }
 });
 
+
 /**
  * @swagger
  * /api/user/{_id}:
- *   post:
+ *   put:
  *     summary: update user profile data
  *     description: update user data with given id and profile json
  *     tags: [Users]
@@ -239,7 +238,7 @@ router.get('/friendList/:_id', async (req, res) => {
  *               success: false
  *               message: "server error."
  */
-router.post('/:_id', async (req, res) => {
+router.put('/:_id', async (req, res) => {
     try {
         const {
             name,
@@ -257,6 +256,14 @@ router.post('/:_id', async (req, res) => {
             bio,
             picUrl
         } = req.body;
+
+        const userExists = User.exists({ _id: req.params._id });
+        if (!userExists) {
+            return res.status(400).json({
+                success: false,
+                message: 'user do not exist.'
+            });
+        }
 
         const updatedUser = await User.findOneAndUpdate(
             { _id: req.params._id },
@@ -296,7 +303,7 @@ router.post('/:_id', async (req, res) => {
             data: updatedUser
         });
     } catch (err) {
-        console.error("post /:_id error:", err);
+        console.error("put /:_id error:", err);
         return res.status(500).json({
             success: false,
             message: 'server error.'
