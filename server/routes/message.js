@@ -142,12 +142,6 @@ router.get('/', async (req, res) => {
         const { user1Id, user2Id, page = 1, limit = 20 } = req.body;
         const skip = (page - 1) * limit;
 
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-        const
-=======
-=======
->>>>>>> main
         const [user1Exists, user2Exists] = await Promise.all([
             User.exists({ _id: user1Id }),
             User.exists({ _id: user2Id })
@@ -166,11 +160,8 @@ router.get('/', async (req, res) => {
             ]
         }).sort({ createAt: 1 }).skip(skip).limit(limit);
 
-<<<<<<< HEAD
         if (!messages || messages.length == 0) {
-=======
-        if (!messages) {
->>>>>>> main
+
             return res.status(404).json({
                 success: false,
                 message: "no messages found for given users."
@@ -181,10 +172,6 @@ router.get('/', async (req, res) => {
             success: true,
             data: messages
         });
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> main
     } catch (err) {
         console.error("get /message error:", err);
         return res.status(500).json({
@@ -192,12 +179,6 @@ router.get('/', async (req, res) => {
             message: 'server error.'
         });
     }
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-});
-=======
-=======
->>>>>>> main
 });
 
 /**
@@ -221,11 +202,7 @@ router.get('/', async (req, res) => {
  *                 receiverId: "507f1f77bcf86cd799439012"
  *                 content: "Hello! How are you?"
  *     responses:
-<<<<<<< HEAD
  *       200:
-=======
- *       201:
->>>>>>> main
  *         description: Message successfully sent
  *         content:
  *           application/json:
@@ -288,9 +265,4 @@ router.post('/', async (req, res) => {
     }
 });
 
-<<<<<<< HEAD
 module.exports = router;
->>>>>>> Stashed changes
-=======
-module.exports = router;
->>>>>>> main
