@@ -56,6 +56,30 @@ const { User, TRIGGER_FIELDS } = require('../models/User');
  *           items:
  *             type: string
  *           description: Common interests between users (only included if there are matches)
+ *     Match:
+ *       type: object
+ *       properties: 
+ *         _id:
+ *           type: string
+ *           description: Match ID
+ *         user1:
+ *           type: string
+ *           description: User ID
+ *         user2:
+ *           type: string
+ *           description: User ID
+ *         user1Response:
+ *           type: string
+ *           enum: ["like", "pass", "pending"]
+ *           description: user 1 response
+ *         user2Response:
+ *           type: string
+ *           enum: ["like", "pass", "pending"]
+ *           description: user 2 response
+ *         matchResult:
+ *           type: string
+ *           enum: ["success", "failed", "pending"]
+ *           description: match status
  *     MatchResponse:
  *       type: object
  *       properties:

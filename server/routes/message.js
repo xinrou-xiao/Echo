@@ -160,7 +160,8 @@ router.get('/', async (req, res) => {
             ]
         }).sort({ createAt: 1 }).skip(skip).limit(limit);
 
-        if (!messages) {
+        if (!messages || messages.length == 0) {
+
             return res.status(404).json({
                 success: false,
                 message: "no messages found for given users."
@@ -201,7 +202,7 @@ router.get('/', async (req, res) => {
  *                 receiverId: "507f1f77bcf86cd799439012"
  *                 content: "Hello! How are you?"
  *     responses:
- *       201:
+ *       200:
  *         description: Message successfully sent
  *         content:
  *           application/json:
