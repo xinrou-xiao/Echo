@@ -156,8 +156,8 @@ router.get('/friendList/:_id', async (req, res) => {
  * @swagger
  * /api/user/{_id}:
  *   put:
- *     summary: update user profile data
- *     description: update user data with given id and profile json
+ *     summary: Update user profile
+ *     description: Update user data with specified ID and profile information
  *     tags: [Users]
  *     parameters:
  *       - in: path
@@ -165,18 +165,61 @@ router.get('/friendList/:_id', async (req, res) => {
  *         required: true
  *         schema:
  *           type: string
- *         description: user _id
+ *         description: User ID
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               gender:
+ *                 type: string
+ *               birthday:
+ *                 type: string
+ *                 format: date
+ *               state:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               language:
+ *                 type: string
+ *               occupation:
+ *                 type: string
+ *               mbti:
+ *                 type: string
+ *               height:
+ *                 type: number
+ *               weight:
+ *                 type: number
+ *               personality:
+ *                 type: string
+ *               interests:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *               bio:
+ *                 type: string
+ *               picUrl:
+ *                 type: string
+ *               food:
+ *                 type: string
+ *               vibe:
+ *                 type: string
+ *               music:
+ *                 type: string
+ *               movie:
+ *                 type: string
+ *               weather:
+ *                 type: string
+ *               friendQuality:
+ *                 type: string
  *           examples:
  *             example1:
- *               summary: example request
+ *               summary: Example update request
  *               value:
- *                 email: "james.brown@example.com"
  *                 name: "James Brown"
  *                 gender: "male"
  *                 birthday: "1990-05-30"
@@ -187,23 +230,32 @@ router.get('/friendList/:_id', async (req, res) => {
  *                 mbti: "INTP"
  *                 height: 175
  *                 weight: 68
+ *                 personality: "Logical analyst who enjoys independent thinking"
  *                 interests: ["data analysis", "chess", "reading", "coffee"]
  *                 bio: "Data scientist with a passion for numbers and patterns"
  *                 picUrl: "https://example.com/images/james.jpg"
- *                 personality: "Logical analyst who enjoys independent thinking"
+ *                 food: "Italian"
+ *                 vibe: "Chill"
+ *                 music: "Jazz"
+ *                 movie: "Inception"
+ *                 weather: "Sunny"
+ *                 friendQuality: "Loyal"
  *     responses:
  *       200:
- *         description: update request success
+ *         description: User profile updated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/ApiResponse'
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: object
  *             example:
  *               success: true
  *               data:
  *                 _id: "6901255c63cbe60d533d7a14"
- *                 email: "james.brown@example.com"
- *                 uid: "sso_jkl901mno234"
  *                 name: "James Brown"
  *                 gender: "male"
  *                 birthday: "1990-05-30"
@@ -218,22 +270,30 @@ router.get('/friendList/:_id', async (req, res) => {
  *                 interests: ["data analysis", "chess", "reading", "coffee"]
  *                 bio: "Data scientist with a passion for numbers and patterns"
  *                 picUrl: "https://example.com/images/james.jpg"
- *                 friends: []
- *       404:
- *         description: user not found
+ *                 food: "Italian"
+ *                 vibe: "Chill"
+ *                 music: "Jazz"
+ *                 movie: "Inception"
+ *                 weather: "Sunny"
+ *                 friendQuality: "Loyal"
+ *       400:
+ *         description: User does not exist
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ApiResponse'
  *             example:
  *               success: false
- *               message: "User not found"
- *       500:
- *         description: server error or exception
+ *               message: "user do not exist."
+ *       404:
+ *         description: User not found
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ApiResponse'
+ *             example:
+ *               success: false
+ *               message: "user not found."
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
  *             example:
  *               success: false
  *               message: "server error."
@@ -254,7 +314,13 @@ router.put('/:_id', async (req, res) => {
             personality,
             interests = [],
             bio,
-            picUrl
+            picUrl,
+            food,
+            vibe,
+            music,
+            movie,
+            weather,
+            friendQuality
         } = req.body;
 
         const userExists = User.exists({ _id: req.params._id });
@@ -282,7 +348,13 @@ router.put('/:_id', async (req, res) => {
                     personality,
                     interests,
                     bio,
-                    picUrl
+                    picUrl,
+                    food,
+                    vibe,
+                    music,
+                    movie,
+                    weather,
+                    friendQuality
                 }
             },
             {

@@ -16,10 +16,9 @@ const messagesData = JSON.parse(fs.readFileSync(path.join(__dirname, '/dummy_dat
 async function main() {
     try {
         await mongoose.connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/echoDB");
-        await SimilarityScore.deleteMany();
+        await cleanDatabase();
         const createdUser = await createUser();
         await MatchingService.generateDailyMatches();
-        // await createMatchs(createdUser);
         await createMessages(createdUser);
     } catch (err) {
         console.error(err.message);
@@ -28,10 +27,15 @@ async function main() {
     }
 }
 
+const cleanDatabase = async () => {
+    await Match.deleteMany();
+    await SimilarityScore.deleteMany();
+    await Message.deleteMany();
+    await User.deleteMany();
+}
+
 const createMatchs = async (createdUser) => {
     try {
-        await Match.deleteMany();
-
         const match1 = new Match(
             {
                 user1: createdUser[0],
@@ -60,8 +64,6 @@ const createMatchs = async (createdUser) => {
 
 const createMessages = async (createdUser) => {
     try {
-        await Message.deleteMany();
-
         const user1Id = createdUser[0]._id;
         const user2Id = createdUser[1]._id;
 
@@ -88,8 +90,6 @@ const createMessages = async (createdUser) => {
 
 const createUser = async () => {
     try {
-        await User.deleteMany({});
-
         const createdUser = [];
         for (let userData of usersData) {
             userData.birthday = new Date(userData.birthday);

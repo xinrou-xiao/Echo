@@ -21,6 +21,12 @@
         "bio": "Software engineer who loves exploring new technologies and outdoor activities",
         "picUrl": "https://example.com/images/emma.jpg",
         "personality": "Ambivert",
+        "food": "Pizza or pasta",
+        "vibe": "Early bird — love slow mornings and sunlight",
+        "music": "Pop / K-pop",
+        "movie": "Thrillers or mysteries",
+        "weather": "Sunny and warm",
+        "friendQuality": "Kindness",
         "friends": []
     },
     {
@@ -45,6 +51,12 @@
         "bio": "Product manager passionate about sports and culinary arts",
         "picUrl": "https://example.com/images/michael.jpg",
         "personality": "Extrovert",
+        "food": "Mexican",
+        "vibe": "Night owl — creative or focused after dark",
+        "music": "Rock / Metal",
+        "movie": "Action or superhero",
+        "weather": "Rainy and cozy",
+        "friendQuality": "Humor",
         "friends": []
     },
     {
@@ -69,6 +81,12 @@
         "bio": "Creative graphic designer with a passion for art and animation",
         "picUrl": "https://example.com/images/sophia.jpg",
         "personality": "Empathetic",
+        "food": "Desserts or baked treats",
+        "vibe": "Depends on the day — flexible with my energy",
+        "music": "Indie / Lo-fi",
+        "movie": "Slice of life or drama",
+        "weather": "Cloudy and calm",
+        "friendQuality": "Emotional intelligence",
         "friends": []
     },
     {
@@ -92,6 +110,12 @@
         "bio": "Data scientist with a passion for numbers and patterns",
         "picUrl": "https://example.com/images/james.jpg",
         "personality": "Creative",
+        "food": "Asian",
+        "vibe": "Night owl — creative or focused after dark",
+        "music": "R&B / Soul",
+        "movie": "Documentaries or true stories",
+        "weather": "Cold and crisp",
+        "friendQuality": "Honesty",
         "friends": []
     },
     {
@@ -116,6 +140,12 @@
         "bio": "Energetic marketing specialist who loves socializing and traveling",
         "picUrl": "https://example.com/images/olivia.jpg",
         "personality": "Strategic Planner",
+        "food": "Anything vegetarian or vegan",
+        "vibe": "Early bird — love slow mornings and sunlight",
+        "music": "Classical / Instrumental",
+        "movie": "Rom-coms",
+        "weather": "Sunny and warm",
+        "friendQuality": "Ambition",
         "friends": []
     }
 ]
