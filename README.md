@@ -9,3 +9,6 @@ To run backend serve(in root folder):
 
 To insert dummy data(in server folder):
   node ./seed.js
+
+To access swagger api doc:
+  {express_server_url}/api-docs
