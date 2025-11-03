@@ -19,10 +19,16 @@ const userSchema = new mongoose.Schema({
     bio: String,
     picUrl: String,
     personality: String,
+    food: String,
+    vibe: String,
+    music: String,
+    movie: String,
+    weather: String,
+    friendQuality: String,
     friends: { type: [mongoose.Schema.Types.ObjectId], ref: 'User', default: [] },
 }, { timestamps: true });
 
-const TRIGGER_FIELDS = ['state', 'language', 'occupation', 'mbti', 'interests'];
+const TRIGGER_FIELDS = ['state', 'language', 'occupation', 'mbti', 'interests', 'personality', 'food', 'vibe', 'music', 'movie', 'weather', 'friendQuality'];
 
 const calculateSimilarityScore = async (_id) => {
     try {
