@@ -16,7 +16,8 @@ import { environment } from '../../../environments/environment';
 import { USER_STORAGE_KEY } from '../constants/auth.constants';
 
 type VerifyUserResponse = {
-  user?: {
+  data?: {
+    _id?: string;
     picUrl?: string | null;
     name?: string | null;
     email?: string | null;
@@ -26,6 +27,7 @@ type VerifyUserResponse = {
 };
 
 type StoredUser = {
+  _id?: string;
   picUrl?: string | null;
   name?: string | null;
   email?: string | null;
@@ -63,6 +65,7 @@ export class AuthService {
         try {
           const parsed = JSON.parse(stored) as Partial<StoredUser> | null;
           this.storedUserSignal.set({
+            _id: parsed?._id,
             picUrl: parsed?.picUrl ?? null,
             name: parsed?.name ?? null,
             email: parsed?.email ?? null,
@@ -169,10 +172,11 @@ export class AuthService {
 
       const isNewUser = this.normalizeIsNewUser(response?.isNewUser);
       const storedUser: StoredUser = {
-        picUrl: response?.user?.picUrl ?? fallbackUser.picUrl,
-        name: response?.user?.name ?? fallbackUser.name,
-        email: response?.user?.email ?? fallbackUser.email,
-        uid: response?.user?.uid ?? fallbackUser.uid,
+        _id: response?.data?._id,
+        picUrl: response?.data?.picUrl ?? fallbackUser.picUrl,
+        name: response?.data?.name ?? fallbackUser.name,
+        email: response?.data?.email ?? fallbackUser.email,
+        uid: response?.data?.uid ?? fallbackUser.uid,
         isNewUser
       };
 

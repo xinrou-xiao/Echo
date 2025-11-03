@@ -341,11 +341,9 @@ router.patch('/:_id', async (req, res) => {
         await match.save();
 
         const updatedMatch = await Match.findById(match._id);
-        console.log(updatedMatch);
         if (updatedMatch.user1Response === "like" && updatedMatch.user2Response === "like") {
             updatedMatch.matchResult = "success";
 
-            console.log(updatedMatch);
             await updatedMatch.save();
 
             const otherUser = await User.findOne({ _id: otherUserId });
@@ -360,7 +358,6 @@ router.patch('/:_id', async (req, res) => {
                 await otherUser.save();
             }
 
-            console.log(`Users ${_id} and ${otherUserId} became friends!`);
         } else if (response === "pass") {
             updatedMatch.matchResult = "failed";
             await updatedMatch.save();
