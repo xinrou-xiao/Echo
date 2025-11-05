@@ -1,3 +1,14 @@
+.upload-status {
+  color: #666;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.save-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 :host {
   display: block;
   min-height: 100vh;
@@ -315,18 +326,18 @@ label.upload-input {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 
   .preference-section h2 {
-  margin-bottom: 1rem;
-}
+    margin-bottom: 1rem;
+  }
 
-.preference-section .field + .field {
-  margin-top: 1rem;
-}
+  .preference-section .field+.field {
+    margin-top: 1rem;
+  }
 
-h2 {
-  margin-top: 0;
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #222;
+  h2 {
+    margin-top: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #222;
   }
 
   .section-hint {

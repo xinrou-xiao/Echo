@@ -27,11 +27,13 @@ const authRouter = require('./routes/auth');
 const userRouter = require('./routes/user');
 const messageRouter = require('./routes/message');
 const matchRouter = require('./routes/match');
+const s3UploadRoutes = require('./routes/upload');
 
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 app.use('/api/message', messageRouter);
 app.use('/api/match', matchRouter);
+app.use('/api/upload', s3UploadRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, {
   explorer: true,
   customCss: '.swagger-ui .topbar { display: none }'

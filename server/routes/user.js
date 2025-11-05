@@ -83,7 +83,7 @@ router.get('/:_id', async (req, res) => {
 
 /**
  * @swagger
- * /api/user/friendList/{_id}:
+ * /api/user/friend-list/{_id}:
  *   get:
  *     summary: get user's friends data
  *     description: get user's friends data by given _id
@@ -114,7 +114,7 @@ router.get('/:_id', async (req, res) => {
  *       500:
  *         description: server error or exception
  */
-router.get('/friendList/:_id', async (req, res) => {
+router.get('/friend-list/:_id', async (req, res) => {
     try {
         const user = await User.findOne(
             { _id: req.params._id },
@@ -304,8 +304,7 @@ router.put('/:_id', async (req, res) => {
             name,
             gender,
             birthday,
-            state,
-            city,
+            location,
             language,
             occupation,
             mbti,
@@ -314,7 +313,7 @@ router.put('/:_id', async (req, res) => {
             personality,
             interests = [],
             bio,
-            picUrl,
+            profilePicture,
             food,
             vibe,
             music,
@@ -323,7 +322,10 @@ router.put('/:_id', async (req, res) => {
             friendQuality
         } = req.body;
 
-        const userExists = User.exists({ _id: req.params._id });
+        const { state, city } = location || {};
+        const picUrl = profilePicture?.url;
+
+        const userExists = await User.exists({ _id: req.params._id });
         if (!userExists) {
             return res.status(400).json({
                 success: false,
