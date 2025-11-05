@@ -1,8 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { response } from 'express';
+import { AuthService } from '../../shared/services/auth.service';
+import { environment } from '../../../environments/environment';
+import { FileUploadService } from '../../shared/services/file-upload.service';
 
 const FALLBACK_AVATAR = 'https://ui-avatars.com/api/?name=Echo&background=FFB4A2&color=1F2937';
+
+interface ProfileResponse {
+  success: boolean;
+  message: string;
+  data?: any;
+}
 
 @Component({
   selector: 'app-profile-page',
@@ -12,10 +23,14 @@ const FALLBACK_AVATAR = 'https://ui-avatars.com/api/?name=Echo&background=FFB4A2
   styleUrl: './profile.css'
 })
 export class ProfilePage {
+  private readonly fileUploadService = inject(FileUploadService);
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly http = inject(HttpClient);
   private uploadedObjectUrl: string | null = null;
 
+  protected readonly isUploading = signal(false);
+  protected readonly uploadError = signal<string | null>(null);
   protected readonly genderOptions = ['Female', 'Male', 'Other'];
   protected readonly stateOptions = [
     'Alabama',
@@ -198,76 +213,76 @@ export class ProfilePage {
   ];
 
   protected readonly preferenceQuestions = [
-  {
-    label: 'Go-to Comfort Food',
-    controlName: 'comfortFood',
-    placeholder: 'Select your comfort food',
-    options: [
-      'Pizza or pasta',
-      'Asian',
-      'Mexican',
-      'Desserts or baked treats',
-      'Anything vegetarian or vegan'
-    ]
-  },
-  {
-    label: 'Your Vibe',
-    controlName: 'vibe',
-    placeholder: 'Select your vibe',
-    options: [
-      'Early bird — love slow mornings and sunlight',
-      'Night owl — creative or focused after dark',
-      'Depends on the day — flexible with my energy'
-    ]
-  },
-  {
-    label: 'Favorite Music Type',
-    controlName: 'music',
-    placeholder: 'Select your music type',
-    options: [
-      'Pop / K-pop',
-      'Indie / Lo-fi',
-      'Rock / Metal',
-      'R&B / Soul',
-      'Classical / Instrumental'
-    ]
-  },
-  {
-    label: 'Favorite Movie Type',
-    controlName: 'movies',
-    placeholder: 'Select your favorite movie type',
-    options: [
-      'Thrillers or mysteries',
-      'Rom-coms',
-      'Action or superhero',
-      'Slice of life or drama',
-      'Documentaries or true stories'
-    ]
-  },
-  {
-    label: 'Favorite Weather',
-    controlName: 'weather',
-    placeholder: 'Select your favorite kind',
-    options: [
-      'Sunny and warm',
-      'Rainy and cozy',
-      'Cloudy and calm',
-      'Cold and crisp'
-    ]
-  },
-  {
-    label: 'Most Valued Qualities in a Friend/Match',
-    controlName: 'qualities',
-    placeholder: 'Select one',
-    options: [
-      'Kindness',
-      'Humor',
-      'Honesty',
-      'Ambition',
-      'Emotional intelligence'
-    ]
-  }
-];
+    {
+      label: 'Go-to Comfort Food',
+      controlName: 'food',
+      placeholder: 'Select your comfort food',
+      options: [
+        'Pizza or pasta',
+        'Asian',
+        'Mexican',
+        'Desserts or baked treats',
+        'Anything vegetarian or vegan'
+      ]
+    },
+    {
+      label: 'Your Vibe',
+      controlName: 'vibe',
+      placeholder: 'Select your vibe',
+      options: [
+        'Early bird — love slow mornings and sunlight',
+        'Night owl — creative or focused after dark',
+        'Depends on the day — flexible with my energy'
+      ]
+    },
+    {
+      label: 'Favorite Music Type',
+      controlName: 'music',
+      placeholder: 'Select your music type',
+      options: [
+        'Pop / K-pop',
+        'Indie / Lo-fi',
+        'Rock / Metal',
+        'R&B / Soul',
+        'Classical / Instrumental'
+      ]
+    },
+    {
+      label: 'Favorite Movie Type',
+      controlName: 'movie',
+      placeholder: 'Select your favorite movie type',
+      options: [
+        'Thrillers or mysteries',
+        'Rom-coms',
+        'Action or superhero',
+        'Slice of life or drama',
+        'Documentaries or true stories'
+      ]
+    },
+    {
+      label: 'Favorite Weather',
+      controlName: 'weather',
+      placeholder: 'Select your favorite kind',
+      options: [
+        'Sunny and warm',
+        'Rainy and cozy',
+        'Cloudy and calm',
+        'Cold and crisp'
+      ]
+    },
+    {
+      label: 'Most Valued Qualities in a Friend/Match',
+      controlName: 'friendQuality',
+      placeholder: 'Select one',
+      options: [
+        'Kindness',
+        'Humor',
+        'Honesty',
+        'Ambition',
+        'Emotional intelligence'
+      ]
+    }
+  ];
 
   protected readonly picPreferenceOptions = [
     { value: 'google', label: 'Use my Google profile photo' },
@@ -313,13 +328,13 @@ export class ProfilePage {
       nonNullable: true
     }),
 
-     /* Personal Preferences */
-    comfortFood: [''],
+    /* Personal Preferences */
+    food: [''],
     vibe: [''],
     music: [''],
-    movies: [''],
+    movie: [''],
     weather: [''],
-    qualities: [''],
+    friendQuality: [''],
 
     bio: ['', [Validators.required, Validators.maxLength(500)]],
     personality: ['', Validators.required],
@@ -333,7 +348,9 @@ export class ProfilePage {
   protected readonly availableCities = signal<string[]>([]);
   protected readonly uploadedFileName = signal<string | null>(null);
 
-  constructor() {
+  constructor(
+    private authService: AuthService
+  ) {
     const initialState = this.profileForm.get('state')?.value;
     if (initialState) {
       this.availableCities.set(this.cityOptionsByState[initialState] ?? []);
@@ -370,6 +387,8 @@ export class ProfilePage {
         this.uploadedObjectUrl = null;
       }
     });
+
+    this.loadUserData();
   }
 
   protected updateFormattedBirthday(): void {
@@ -477,15 +496,65 @@ export class ProfilePage {
     return Boolean(control && control.invalid && control.touched);
   }
 
-  protected onSubmit(): void {
+  protected async onSubmit(): Promise<void> {
+    const user = this.authService.profile();
+    if (!user || !user._id) return;
+
     if (this.profileForm.invalid) {
       this.profileForm.markAllAsTouched();
       return;
     }
 
     this.isSaving.set(true);
-    this.showSuccess.set(false);
+    this.uploadError.set(null);
 
+    try {
+      let profilePictureUrl: string | null = null;
+
+      const picFile = this.profileForm.get('picFile')?.value;
+      const picPreference = this.profileForm.get('picPreference')?.value;
+
+      if (picPreference === 'upload' && picFile) {
+        profilePictureUrl = await this.uploadProfilePicture(picFile);
+      }
+
+      const profilePayload = this.prepareProfilePayload(profilePictureUrl);
+      await this.submitProfileData(user._id, profilePayload);
+
+    } catch (error) {
+      console.error('Submit error:', error);
+      this.uploadError.set('Failed to upload profile picture');
+    } finally {
+      this.isSaving.set(false);
+    }
+  }
+
+  private async uploadProfilePicture(file: File): Promise<string> {
+    this.isUploading.set(true);
+
+    try {
+      const presignedResponse = await this.fileUploadService
+        .getPresignedUrl(file.name, file.type)
+        .toPromise();
+
+      if (!presignedResponse?.success) {
+        throw new Error('Failed to get upload URL');
+      }
+
+      await this.fileUploadService
+        .uploadToS3(presignedResponse.presignedUrl, file)
+        .toPromise();
+
+      return presignedResponse.fileUrl;
+    } catch (error) {
+      console.error('picture upload failed:', error);
+      throw new Error('Failed to upload profile picture');
+    } finally {
+      this.isUploading.set(false);
+    }
+  }
+
+  private prepareProfilePayload(profilePictureUrl: string | null): any {
     const {
       birthdayYear,
       birthdayMonth,
@@ -504,7 +573,28 @@ export class ProfilePage {
       Number(birthdayDay)
     );
 
-    const profilePayload = {
+    const getGooglePhotoUrl = (): string | null => {
+      if (typeof window !== 'undefined') {
+        try {
+          const storedUserRaw = window.localStorage.getItem('echo.user');
+          if (storedUserRaw) {
+            const storedUser = JSON.parse(storedUserRaw) as {
+              picUrl?: string;
+              photoURL?: string;
+              photoUrl?: string;
+            };
+            return storedUser.picUrl || storedUser.photoURL || storedUser.photoUrl || null;
+          }
+        } catch (error) {
+          console.error('Failed to get Google photo from localStorage:', error);
+        }
+      }
+      return null;
+    };
+
+    const googlePhotoUrl = getGooglePhotoUrl();
+
+    return {
       ...rest,
       interests,
       location: {
@@ -512,22 +602,144 @@ export class ProfilePage {
         city
       },
       birthday: birthday.toISOString().split('T')[0],
-      profilePicture:
-        picPreference === 'google'
-          ? { source: 'google-default' }
-          : {
-              source: 'uploaded',
-              fileName: picFile?.name ?? null,
-              fileSize: picFile?.size ?? null,
-              fileType: picFile?.type ?? null
-            }
+      profilePicture: profilePictureUrl ? {
+        source: 'uploaded',
+        url: profilePictureUrl,
+        fileName: picFile?.name ?? null
+      } : picPreference === 'google' ? {
+        source: 'google-default',
+        url: googlePhotoUrl,
+        fileName: 'google-profile-picture'
+      } : {
+        source: 'none',
+        url: null,
+        fileName: null
+      }
     };
+  }
 
-    console.table(profilePayload);
+  private submitProfileData(userId: string, profileData: any): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.put<ProfileResponse>(`${environment.apiUrl}/user/${userId}`, profileData)
+        .subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.showSuccess.set(true);
+              setTimeout(() => this.showSuccess.set(false), 3000);
+              resolve();
+            } else {
+              reject(new Error(response.message || 'Save failed'));
+            }
+          },
+          error: (error) => {
+            reject(error);
+          }
+        });
+    });
+  }
 
-    setTimeout(() => {
-      this.isSaving.set(false);
-      this.showSuccess.set(true);
-    }, 400);
+  protected isInterestSelected(interest: string): boolean {
+    const currentInterests = this.profileForm.get('interests')?.value || [];
+    return currentInterests.includes(interest);
+  }
+
+  protected onInterestChange(event: Event, interest: string): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    const currentInterests = this.profileForm.get('interests')?.value || [];
+
+    let updatedInterests: string[];
+
+    if (isChecked) {
+      updatedInterests = [...currentInterests, interest];
+    } else {
+      updatedInterests = currentInterests.filter(i => i !== interest);
+    }
+
+    this.profileForm.patchValue({ interests: updatedInterests });
+    this.profileForm.get('interests')?.markAsTouched();
+  }
+
+  private loadUserData(): void {
+    const user = this.authService.profile();
+    if (!user || !user._id) {
+      console.log('No user found');
+      return;
+    }
+
+    this.http.get<ProfileResponse>(`${environment.apiUrl}/user/${user._id}`)
+      .subscribe({
+        next: (response) => {
+          if (response.success && response.data) {
+            console.log('User data loaded:', response.data);
+            this.populateForm(response.data);
+          }
+        },
+        error: (error) => {
+          console.error('Failed to load user data:', error);
+        }
+      });
+  }
+
+  private populateForm(userData: any): void {
+    try {
+      this.profileForm.patchValue({
+        name: userData.name || '',
+        gender: userData.gender || '',
+        language: userData.language || '',
+        occupation: userData.occupation || '',
+        mbti: userData.mbti || '',
+        height: userData.height || '',
+        weight: userData.weight || '',
+        bio: userData.bio || '',
+        personality: userData.personality || '',
+        interests: userData.interests || []
+      });
+
+      this.profileForm.patchValue({
+        food: userData.food || '',
+        vibe: userData.vibe || '',
+        music: userData.music || '',
+        movie: userData.movie || '',
+        weather: userData.weather || '',
+        friendQuality: userData.friendQuality || ''
+      });
+
+      if (userData.birthday) {
+        const birthday = new Date(userData.birthday);
+        this.profileForm.patchValue({
+          birthdayYear: birthday.getFullYear().toString(),
+          birthdayMonth: (birthday.getMonth() + 1).toString(),
+          birthdayDay: birthday.getDate().toString()
+        });
+        this.updateFormattedBirthday();
+      }
+
+      if (userData.state) {
+        this.profileForm.patchValue({
+          state: userData.state || '',
+          city: userData.city || ''
+        });
+
+        if (userData.state) {
+          this.availableCities.set(this.cityOptionsByState[userData.state] || []);
+        }
+      }
+
+      if (userData.picUrl) {
+        const isGooglePhoto = userData.picUrl.includes('googleusercontent.com') ||
+          userData.picUrl.includes('google');
+
+        this.profileForm.patchValue({
+          picPreference: isGooglePhoto ? 'google' : 'upload'
+        });
+
+        if (isGooglePhoto) {
+          this.defaultAvatarUrl.set(userData.picUrl);
+          this.profilePhoto.set(userData.picUrl);
+        }
+      }
+    } catch (error) {
+      console.error('Error populating form:', error);
+    }
   }
 }

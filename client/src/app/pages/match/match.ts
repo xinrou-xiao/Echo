@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../shared/services/auth.service';
+import { environment } from '../../../environments/environment';
 
 type MatchProfile = {
   name: string;
@@ -37,7 +38,7 @@ export class MatchPage {
   getUserData() {
     const user = this.authService.profile();
     if (user && user.uid) {
-      this.http.get(`http://localhost:3000/api/match/${user._id}`, { observe: 'response' })
+      this.http.get(`${environment.apiUrl}/match/${user._id}`, { observe: 'response' })
         .subscribe({
           next: (response) => {
             if (response.status == 200) {
