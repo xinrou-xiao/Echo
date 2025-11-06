@@ -3,6 +3,7 @@ import { Component, ChangeDetectorRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../../shared/services/auth.service';
 import { environment } from '../../../environments/environment';
+import { RouterModule } from '@angular/router';
 
 type MatchProfile = {
   name: string;
@@ -18,12 +19,14 @@ type MatchProfile = {
 @Component({
   selector: 'app-match-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './match.html',
   styleUrl: './match.css'
 })
 export class MatchPage {
   protected todayMatch: MatchProfile | null = null;
+  protected decision: 'like' | 'pass' | null = null;
+  protected matchResult: string | null = null;
 
   constructor(
     private authService: AuthService,
@@ -31,62 +34,78 @@ export class MatchPage {
     private cdr: ChangeDetectorRef
   ) { }
 
-  ngOnInit() {
-    this.getUserData();
+  async ngOnInit() {
+    await this.authService.ready();
+    const user = this.authService.profile();
+    if (user && user._id) this.getUserData(user._id);
   }
 
-  getUserData() {
-    const user = this.authService.profile();
-    if (user && user.uid) {
-      this.http.get(`${environment.apiUrl}/match/${user._id}`, { observe: 'response' })
-        .subscribe({
-          next: (response) => {
-            if (response.status == 200) {
-              const body = response.body as any;
-              let matchedUser = body.data?.matchedUser;
+  private getUserData(userId: string) {
+    this.http.get(`${environment.apiUrl}/match/${userId}`, { observe: 'response' })
+      .subscribe({
+        next: (response) => {
+          if (response.status === 200) {
+            const body = response.body as any;
+            const matchedUser = body.data?.matchedUser;
+            const match = body.data?.match;
 
-              this.todayMatch = {
-                name: matchedUser.name,
-                age: this.calculateAge(matchedUser.birthday),
-                gender: matchedUser.gender,
-                height: `${matchedUser.height} cm`,
-                weight: `${matchedUser.weight} kg`,
-                bio: matchedUser.bio,
-                picUrl: matchedUser.picUrl,
+            this.todayMatch = {
+              name: matchedUser.name,
+              age: this.calculateAge(matchedUser.birthday),
+              gender: matchedUser.gender,
+              height: `${matchedUser.height} cm`,
+              weight: `${matchedUser.weight} kg`,
+              bio: matchedUser.bio,
+              picUrl: matchedUser.picUrl,
+              ...matchedUser
+            };
 
-                ...matchedUser
-              };
+            this.setDecisionFromMatchResponse(userId, match);
+            this.setMatchResult(match);
 
-              console.log(this.todayMatch)
-            }
-          },
-          error: (error) => {
-            console.error('error:', error);
+            this.cdr.detectChanges();
           }
-        });
+        },
+        error: (error) => console.error('error:', error)
+      });
+  }
+
+  private setDecisionFromMatchResponse(currentUserId: string, match: any): void {
+    if (!match) return;
+
+    if (match.user1 === currentUserId) {
+      if (match.user1Response !== 'pending') {
+        this.decision = match.user1Response === 'like' ? 'like' : 'pass';
+      }
+    } else if (match.user2 === currentUserId) {
+      if (match.user2Response !== 'pending') {
+        this.decision = match.user2Response === 'like' ? 'like' : 'pass';
+      }
+    }
+  }
+
+  private setMatchResult(match: any): void {
+    if (!match) return;
+
+    if (match.matchResult === 'success') {
+      this.matchResult = 'success';
     } else {
-      console.log('User not logging in');
+      this.matchResult = null;
     }
   }
 
   private calculateAge(birthday: string): number {
     if (!birthday) return 0;
-
     const birthDate = new Date(birthday);
     const today = new Date();
     let age = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
     return age;
   }
 
   getDynamicFields(): string[] {
     if (!this.todayMatch) return [];
-
     const excludedFields = [
       'name', 'age', 'gender', 'height', 'weight', 'bio', 'picUrl', '_id', 'birthday', 'createdAt', 'updatedAt', '__v'
     ];
@@ -118,34 +137,43 @@ export class MatchPage {
   }
 
   formatFieldValue(fieldName: string, value: any): string {
-    if (fieldName === 'commonInterests' && Array.isArray(value)) {
-      return value.join('、');
-    }
+    if (fieldName === 'commonInterests' && Array.isArray(value)) return value.join('、');
     return String(value);
   }
 
   onImageError(event: Event): void {
     const imgElement = event.target as HTMLImageElement;
     const gender = this.todayMatch?.gender?.toLowerCase();
-
-    if (gender === 'male') {
-      imgElement.src = '/assets/images/avatar/male_default.jpg';
-    } else if (gender === 'female') {
-      imgElement.src = '/assets/images/avatar/female_default.jpg';
-    } else {
-      imgElement.src = '/assets/images/avatar/other_default.jpg';
-    }
+    if (gender === 'male') imgElement.src = '/assets/images/avatar/male_default.jpg';
+    else if (gender === 'female') imgElement.src = '/assets/images/avatar/female_default.jpg';
+    else imgElement.src = '/assets/images/avatar/other_default.jpg';
     imgElement.alt = 'Default image';
     this.cdr.detectChanges();
   }
 
-  protected decision: 'like' | 'pass' | null = null;
-
   protected onLike(): void {
     this.decision = 'like';
+    this.updateMatchResponse('like');
   }
 
   protected onPass(): void {
     this.decision = 'pass';
+    this.updateMatchResponse('pass');
+  }
+
+  private updateMatchResponse(response: 'like' | 'pass'): void {
+    const user = this.authService.profile();
+    if (!user || !user._id) return;
+
+    this.http.patch(`${environment.apiUrl}/match/${user._id}`, {
+      response: response
+    }).subscribe({
+      next: () => {
+        console.log(`Match response updated to: ${response}`);
+      },
+      error: (error) => {
+        console.error('Error updating match response:', error);
+      }
+    });
   }
 }

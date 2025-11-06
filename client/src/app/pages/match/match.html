@@ -82,14 +82,29 @@
             </ng-container>
 
             <ng-template #decisionMessage>
-              <div class="decision-message text-center">
-                <p class="decision-text mb-0" *ngIf="decision === 'pass'">
-                  You have passed on this match!
-                </p>
-                <p class="decision-text mb-0" *ngIf="decision === 'like'">
-                  You have liked this match!
-                </p>
-              </div>
+              <ng-container *ngIf="matchResult === 'success'; else decisionTemplate">
+                <div class="match-success-message text-center">
+                  <p class="match-success-text mb-3">
+                    You're match success!
+                  </p>
+                  <p class="match-success-text mb-3">
+                    Go to message page to chat with your new friend.
+                  </p>
+                  <button class="btn btn-danger" routerLink="/chat">
+                    Go to Messages
+                  </button>
+                </div>
+              </ng-container>
+
+              <ng-template #decisionTemplate>
+                <div class="decision-message text-center" [class.decision-message-pass]="decision === 'pass'"
+                  [class.decision-message-like]="decision === 'like'">
+                  <p class="mb-0" [class.decision-pass]="decision === 'pass'"
+                    [class.decision-like]="decision === 'like'">
+                    {{ decision === 'like' ? 'You have liked this match!' : 'You have passed on this match!' }}
+                  </p>
+                </div>
+              </ng-template>
             </ng-template>
           </div>
         </div>

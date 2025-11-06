@@ -1,3 +1,17 @@
+.match-success-message {
+  background-color: #edd4d4;
+  border: 1px solid #c3e6cb;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 10px 0;
+}
+
+.match-success-text {
+  color: #9f2828;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
 :host {
   display: flex;
   flex-direction: column;
@@ -104,10 +118,30 @@
   border-radius: 18px;
 }
 
+.decision-message-pass {
+  background-color: rgba(59, 130, 246, 0.12);
+}
+
+.decision-message-like {
+  background-color: rgba(246, 59, 59, 0.12);
+}
+
 .decision-text {
+  padding: 12px 20px;
+  border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1d4ed8;
+  border: 2px solid transparent;
+}
+
+.decision-like {
+  color: red;
+  font-weight: bold;
+}
+
+.decision-pass {
+  color: rgb(40, 88, 222);
+  font-weight: bold;
 }
 
 .btn {
