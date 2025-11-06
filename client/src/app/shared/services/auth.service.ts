@@ -44,6 +44,7 @@ export class AuthService {
   private readonly googleProvider = new GoogleAuthProvider();
   private readonly userSignal = signal<User | null>(null);
   private readonly storedUserSignal = signal<StoredUser | null>(null);
+  private readonly readySignal = signal(false);
   private redirectAfterLogin: string | null = null;
   private manualLogout = false;
 
@@ -54,11 +55,8 @@ export class AuthService {
   ) {
     this.firebaseApp = this.ensureFirebaseApp();
     this.auth = getAuth(this.firebaseApp);
-
     const currentUser = this.auth.currentUser;
-    if (currentUser) {
-      this.userSignal.set(currentUser);
-    }
+    if (currentUser) this.userSignal.set(currentUser);
     if (typeof window !== 'undefined') {
       const stored = window.localStorage.getItem(USER_STORAGE_KEY);
       if (stored) {
@@ -77,11 +75,25 @@ export class AuthService {
         }
       }
     }
-
     onAuthStateChanged(this.auth, (user) => {
-      this.zone.run(() => {
-        void this.handleAuthStateChange(user);
+      this.zone.run(async () => {
+        await this.handleAuthStateChange(user);
+        this.readySignal.set(true);
       });
+    });
+  }
+
+  ready(): Promise<void> {
+    return new Promise((resolve) => {
+      if (this.readySignal()) resolve();
+      else {
+        const check = setInterval(() => {
+          if (this.readySignal()) {
+            clearInterval(check);
+            resolve();
+          }
+        }, 100);
+      }
     });
   }
 
@@ -102,41 +114,26 @@ export class AuthService {
   }
 
   async loginWithGoogle(): Promise<void> {
-    try {
-      await signInWithPopup(this.auth, this.googleProvider);
-    } catch (error) {
-      console.error('login failed', error);
-      throw error;
-    }
+    await signInWithPopup(this.auth, this.googleProvider);
   }
 
   async logout(): Promise<void> {
-    try {
-      this.manualLogout = true;
-      await signOut(this.auth);
-    } catch (error) {
-      console.error('logout failed', error);
-      throw error;
-    }
+    this.manualLogout = true;
+    await signOut(this.auth);
   }
 
   private async handleAuthStateChange(user: User | null): Promise<void> {
     this.userSignal.set(user);
-    console.log('User state changed:', user);
-
     if (user) {
       const storedUser = await this.verifyUserWithBackend(user);
       this.storedUserSignal.set(storedUser);
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(storedUser));
       }
-
       if (this.redirectAfterLogin) {
         const target = this.redirectAfterLogin;
         this.redirectAfterLogin = null;
-        if (!storedUser.isNewUser) {
-          await this.router.navigate([target]);
-        }
+        if (!storedUser.isNewUser) await this.router.navigate([target]);
       }
     } else {
       this.storedUserSignal.set(null);
@@ -157,7 +154,6 @@ export class AuthService {
       uid: firebaseUser.uid,
       isNewUser: false
     };
-
     try {
       const userData = {
         uid: firebaseUser.uid,
@@ -165,11 +161,9 @@ export class AuthService {
         name: firebaseUser.displayName,
         photoURL: firebaseUser.photoURL
       };
-
       const response = await firstValueFrom(
         this.http.post<VerifyUserResponse>('http://localhost:3000/api/auth/verify_user', userData)
       );
-
       const isNewUser = this.normalizeIsNewUser(response?.isNewUser);
       const storedUser: StoredUser = {
         _id: response?.data?._id,
@@ -179,47 +173,32 @@ export class AuthService {
         uid: response?.data?.uid ?? fallbackUser.uid,
         isNewUser
       };
-
       if (isNewUser) {
         this.redirectAfterLogin = null;
         await this.router.navigate(['/profile']);
       }
-
       return storedUser;
-    } catch (error) {
-      console.error('backend error:', error);
+    } catch {
       return fallbackUser;
     }
   }
 
   private ensureFirebaseApp(): FirebaseApp {
     const apps = getApps();
-    if (apps.length > 0) {
-      return getApp();
-    }
-    return initializeApp(environment.firebase);
+    return apps.length > 0 ? getApp() : initializeApp(environment.firebase);
   }
 
   private clearStoredUser(): void {
-    if (typeof window !== 'undefined') {
-      window.localStorage.removeItem(USER_STORAGE_KEY);
-    }
+    if (typeof window !== 'undefined') window.localStorage.removeItem(USER_STORAGE_KEY);
   }
 
   private normalizeIsNewUser(value: VerifyUserResponse['isNewUser']): boolean {
-    if (typeof value === 'boolean') {
-      return value;
-    }
-
-    if (typeof value === 'number') {
-      return value === 1;
-    }
-
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'number') return value === 1;
     if (typeof value === 'string') {
       const normalized = value.trim().toLowerCase();
       return normalized === 'true' || normalized === '1' || normalized === 'yes';
     }
-
     return false;
   }
 }
