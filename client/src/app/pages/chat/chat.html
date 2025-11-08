@@ -8,12 +8,8 @@
           <h2 class="sidebar-title h5 mb-3">Conversations</h2>
 
           <ul class="list-group contact-list">
-            <li
-              *ngFor="let contact of contacts"
-              class="list-group-item border-0 p-0 contact-item"
-              [class.active]="contact.id === selectedContactId"
-              (click)="selectContact(contact.id)"
-            >
+            <li *ngFor="let contact of contacts" class="list-group-item border-0 p-0 contact-item"
+              [class.active]="contact.id === selectedContactId" (click)="selectContact(contact.id)">
               <img class="contact-avatar" [src]="contact.avatar" [alt]="contact.name" />
               <div class="contact-meta">
                 <span class="contact-name">{{ contact.name }}</span>
@@ -25,11 +21,7 @@
         </div>
 
         <footer class="card-footer chat-sidebar-footer">
-          <button
-            class="btn w-100 sidebar-action-button"
-            type="button"
-            (click)="goToMatch()"
-          >
+          <button class="btn w-100 sidebar-action-button" type="button" (click)="goToMatch()">
             Check Your Match
           </button>
         </footer>
@@ -47,12 +39,9 @@
           <button type="button" class="btn chat-action-button">View Profile</button>
         </header>
 
-        <div class="chat-messages card-body">
-          <div
-            *ngFor="let message of messagesForSelected()"
-            class="chat-message"
-            [class.from-me]="message.from === 'me'"
-          >
+        <div #chatMessages id="chatMessages" (scroll)="onScroll($event)" class="chat-messages card-body">
+          <div *ngFor="let message of messagesForSelected()" class="chat-message"
+            [class.from-me]="message.from === 'me'">
             <div class="chat-bubble">
               <p class="chat-text mb-0">{{ message.text }}</p>
               <span class="chat-timestamp">{{ message.timestamp }}</span>
@@ -62,13 +51,8 @@
 
         <form class="chat-composer card-footer" (ngSubmit)="sendMessage()">
           <div class="input-group">
-            <input
-              type="text"
-              class="form-control chat-input"
-              placeholder="Write a message…"
-              [(ngModel)]="draftMessage"
-              name="draftMessage"
-            />
+            <input type="text" class="form-control chat-input" placeholder="Write a message…" [(ngModel)]="draftMessage"
+              name="draftMessage" />
             <button class="btn chat-send-button" type="submit">Send</button>
           </div>
         </form>

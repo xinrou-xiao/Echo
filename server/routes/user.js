@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { User } = require('../models/User');
+const Message = require('../models/Message');
 
 /**
  * @swagger
@@ -129,18 +130,36 @@ router.get('/friend-list/:_id', async (req, res) => {
         }
 
         const friendsId = user.friends || [];
-        const friendsObject = [];
+        const friendsWithLastMessage = [];
 
         for (const friendId of friendsId) {
             const friend = await User.findOne({ _id: friendId });
             if (friend) {
-                friendsObject.push(friend);
+                const lastMessage = await Message.findOne({
+                    $or: [
+                        { senderId: req.params._id, receiverId: friendId },
+                        { senderId: friendId, receiverId: req.params._id }
+                    ]
+                }).sort({ createdAt: -1 });
+
+                friendsWithLastMessage.push({
+                    ...friend.toObject(),
+                    lastMessageTime: lastMessage ? lastMessage.createdAt : null,
+                    lastMessage: lastMessage ? lastMessage.content : "",
+                });
             }
         }
 
+        friendsWithLastMessage.sort((a, b) => {
+            if (!a.lastMessageTime && !b.lastMessageTime) return 0;
+            if (!a.lastMessageTime) return 1;
+            if (!b.lastMessageTime) return -1;
+            return new Date(b.lastMessageTime) - new Date(a.lastMessageTime);
+        });
+
         return res.json({
             success: true,
-            data: friendsObject
+            data: friendsWithLastMessage
         })
     } catch (err) {
         console.error('get /user/friendList/:_id api error:', err);
