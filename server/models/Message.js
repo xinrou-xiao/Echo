@@ -7,4 +7,4 @@ const messageSchema = mongoose.Schema({
     content: { type: String, require: true },
 }, { timestamps: true });
 
-module.exports = mongoose.model("Messagge", messageSchema);
+module.exports = mongoose.model("Message", messageSchema);

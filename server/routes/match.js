@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Match = require('../models/Match');
+const Message = require('../models/Message');
 const { User, TRIGGER_FIELDS } = require('../models/User');
 
 /**
@@ -358,6 +359,12 @@ router.patch('/:_id', async (req, res) => {
                 await otherUser.save();
             }
 
+            const emptyMessage = new Message({
+                receiverId: user._id,
+                senderId: otherUser._id,
+                content: ""
+            })
+            await emptyMessage.save();
         } else if (response === "pass") {
             updatedMatch.matchResult = "failed";
             await updatedMatch.save();

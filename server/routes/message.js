@@ -139,7 +139,9 @@ const { User } = require('../models/User');
  */
 router.get('/', async (req, res) => {
     try {
-        const { user1Id, user2Id, page = 1, limit = 20 } = req.body;
+        const { user1Id, user2Id } = req.query;
+        const page = Math.max(1, parseInt(String(req.query.page || '1'), 10));
+        const limit = Math.max(1, parseInt(String(req.query.limit || '20'), 10));
         const skip = (page - 1) * limit;
 
         const [user1Exists, user2Exists] = await Promise.all([
@@ -158,19 +160,24 @@ router.get('/', async (req, res) => {
                 { senderId: user1Id, receiverId: user2Id },
                 { senderId: user2Id, receiverId: user1Id }
             ]
-        }).sort({ createAt: 1 }).skip(skip).limit(limit);
+        })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
 
-        if (!messages || messages.length == 0) {
-
-            return res.status(404).json({
-                success: false,
-                message: "no messages found for given users."
+        if (!messages || messages.length === 0) {
+            return res.json({
+                success: true,
+                data: []
             });
         }
 
+        const chronological = messages.reverse();
+
         return res.json({
             success: true,
-            data: messages
+            data: chronological
         });
     } catch (err) {
         console.error("get /message error:", err);
@@ -180,6 +187,7 @@ router.get('/', async (req, res) => {
         });
     }
 });
+
 
 /**
  * @swagger

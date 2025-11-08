@@ -1,8 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--navbar-height));
-  height: calc(100vh - var(--navbar-height));
+  min-height: 100vh;
   background-color: #B5828C;
   margin: 0;
   padding: 0;
@@ -18,7 +17,7 @@ section.container {
   padding-bottom: 0;
 }
 
-section.container > .row {
+section.container>.row {
   flex: 1 1 auto;
   display: flex;
   align-items: stretch;
@@ -27,20 +26,22 @@ section.container > .row {
   min-height: 0;
 }
 
-section.container > .row > aside,
-section.container > .row > main {
+section.container>.row>aside,
+section.container>.row>main {
   display: flex;
   flex-direction: column;
   min-height: 0;
 }
 
 .page-footer {
-  margin-top: auto;
+  margin-top: 0;
+  text-align: center;
   text-align: center;
   color: #ffffff;
   font-size: 0.85rem;
   font-weight: 500;
   padding: 0.25rem 0 0.1rem;
+  background-color: #B5828C;
 }
 
 .chat-sidebar,
@@ -56,7 +57,7 @@ section.container > .row > main {
   border: 1px solid rgba(0, 0, 0, 0.08);
   display: grid;
   grid-template-rows: 1fr auto;
-  min-height: 0;
+  height: calc(100vh - var(--navbar-height) - 2rem);
   overflow: hidden;
 }
 
@@ -66,6 +67,7 @@ section.container > .row > main {
   flex-direction: column;
   gap: 1rem;
   min-height: 0;
+  overflow: hidden;
 }
 
 .sidebar-title {
@@ -85,6 +87,7 @@ section.container > .row > main {
   gap: 0.75rem;
   min-height: 0;
   overflow-y: auto;
+  max-height: calc(100vh - var(--navbar-height) - 10rem);
 }
 
 .chat-sidebar-footer {
@@ -154,8 +157,8 @@ section.container > .row > main {
 }
 
 .contact-name {
-  font-weight: 600;
   color: #0f172a;
+  font-size: small;
 }
 
 .contact-last-message {
@@ -172,6 +175,7 @@ section.container > .row > main {
   color: #94a3b8;
   justify-self: end;
   white-space: nowrap;
+  padding-right: 5px;
 }
 
 .chat-panel {
@@ -180,7 +184,7 @@ section.container > .row > main {
   border: 1px solid rgba(0, 0, 0, 0.08);
   display: grid;
   grid-template-rows: auto 1fr auto;
-  overflow: hidden;
+  height: calc(100vh - var(--navbar-height) - 2rem);
 }
 
 .chat-header {
@@ -233,17 +237,18 @@ section.container > .row > main {
 }
 
 .chat-messages {
-  padding: 1.5rem;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
-  background-color: transparent;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  max-height: calc(100vh - var(--navbar-height) - 200px);
 }
+
 
 .chat-message {
   display: flex;
   justify-content: flex-start;
+  position: relative;
+  margin-bottom: 1.5rem;
 }
 
 .chat-message.from-me {
@@ -254,11 +259,11 @@ section.container > .row > main {
   max-width: 75%;
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 18px;
-  padding: 0.5rem 0.8rem;
-  position: relative;
+  padding: 0.75rem 1rem;
   border: 2px solid #E5989B;
   box-sizing: border-box;
   line-height: 1.4;
+  position: relative;
 }
 
 .chat-message.from-me .chat-bubble {
@@ -273,14 +278,36 @@ section.container > .row > main {
 
 .chat-timestamp {
   position: absolute;
-  bottom: -1.1rem;
-  right: 0.5rem;
+  bottom: -1rem;
   font-size: 0.7rem;
   color: rgba(100, 116, 139, 0.8);
+  white-space: nowrap;
+}
+
+.chat-message:not(.from-me) .chat-timestamp {
+  right: 0;
 }
 
 .chat-message.from-me .chat-timestamp {
-  color: rgba(255, 255, 255, 0.7);
+  right: 0;
+}
+
+.chat-text {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.chat-timestamp {
+  font-size: 0.7rem;
+  color: rgba(100, 116, 139, 0.8);
+  white-space: nowrap;
+  align-self: flex-end;
+  margin-bottom: 0.0rem;
+}
+
+.chat-message.from-me .chat-timestamp {
+  color: rgba(100, 116, 139, 0.8);
+  order: -1;
 }
 
 .chat-composer {
@@ -324,7 +351,7 @@ section.container > .row > main {
 }
 
 .chat-send-button:hover {
-  transform: translateY(-2px);
+  background-color: #B5828C;
 }
 
 @media (max-width: 991.98px) {
@@ -332,12 +359,12 @@ section.container > .row > main {
     min-height: auto;
   }
 
-  section.container > .row {
+  section.container>.row {
     flex: none;
   }
 
-  section.container > .row > aside,
-  section.container > .row > main {
+  section.container>.row>aside,
+  section.container>.row>main {
     display: block;
   }
 }
