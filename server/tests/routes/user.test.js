@@ -1,11 +1,11 @@
 const request = require('supertest');
-const app = require('../server');
+const app = require('../../server');
 const mongoose = require('mongoose');
-const { User } = require('../models/User');
-const Message = require('../models/Message')
+const { User } = require('../../models/User');
+const Message = require('../../models/Message');
 
-jest.mock('../models/User');
-jest.mock('../models/Message');
+jest.mock('../../models/User');
+jest.mock('../../models/Message');
 
 describe('User api routes', () => {
     beforeEach(() => {
