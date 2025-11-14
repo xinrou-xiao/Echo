@@ -120,6 +120,11 @@ const { User } = require('../models/User');
  *                   success: false
  *                   message: "server error."
  */
+
+/**4 Back in the service, we normalize the response, store it in a signal and Local Storage, 
+ * and if it’s a new user we navigate to /profile. Our components then use this stored 
+ * user data to render UI or decide navigation.*/
+
 router.post('/verify_user', async (req, res) => {
     try {
         const { uid, email, name, photoURL } = req.body;

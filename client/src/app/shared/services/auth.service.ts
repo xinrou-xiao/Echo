@@ -1,3 +1,5 @@
+/** 1 This is our AuthService. It injects HttpClient, 
+ * so the frontend can call our backend API.*/
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone, signal } from '@angular/core';
 import { Router } from '@angular/router';
@@ -35,6 +37,7 @@ type StoredUser = {
   isNewUser: boolean;
 };
 
+/** 1*/
 @Injectable({
   providedIn: 'root'
 })
@@ -126,6 +129,11 @@ export class AuthService {
     this.userSignal.set(user);
     if (user) {
       const storedUser = await this.verifyUserWithBackend(user);
+      /**3 */
+      // 3 On the server side, this Express route receives those parameters, 
+      // then uses Mongoose to check MongoDB. If a user with that uid already exists, 
+      //we return that document with isNewUser: false. Otherwise, 
+      //we create and save a new user and return isNewUser: true.*/
       this.storedUserSignal.set(storedUser);
       if (typeof window !== 'undefined') {
         window.localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(storedUser));
@@ -145,7 +153,8 @@ export class AuthService {
       }
     }
   }
-
+ 
+  /** 2*/
   private async verifyUserWithBackend(firebaseUser: User): Promise<StoredUser> {
     const fallbackUser: StoredUser = {
       picUrl: firebaseUser.photoURL,
@@ -162,6 +171,9 @@ export class AuthService {
         photoURL: firebaseUser.photoURL
       };
       const response = await firstValueFrom(
+        //After a Google sign-in, we call verifyUserWithBackend. 
+        //Here we send a POST request to /api/auth/verify_user with the user’s uid, email, name, and photoURL.
+        /** 2*/
         this.http.post<VerifyUserResponse>('http://localhost:3000/api/auth/verify_user', userData)
       );
       const isNewUser = this.normalizeIsNewUser(response?.isNewUser);
