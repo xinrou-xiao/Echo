@@ -212,7 +212,7 @@ router.get('/:_id', async (req, res) => {
         });
 
         if ("state" in filteredMatchedUser) {
-            filteredMatchedUser[city] = matchedUser.city;
+            filteredMatchedUser['city'] = matchedUser.city;
         }
 
         if (user.interests && matchedUser.interests) {

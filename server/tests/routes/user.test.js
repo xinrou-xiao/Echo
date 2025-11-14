@@ -55,12 +55,12 @@ describe('User api routes', () => {
     describe('Get /api/user/:_id', () => {
         it('should return 500 on ObjectId wrong format', async () => {
             const mockUserId = '123456';
-            User.findOne.mockResolvedValue(null);
+            User.findOne.mockRejectedValue(new Error('DB error'));
 
-            const response = await request(app).get(`/api/user/${mockUserId}`).expect(404);
+            const response = await request(app).get(`/api/user/${mockUserId}`).expect(500);
 
             expect(response.body.success).toBe(false);
-            expect(response.body.message).toBe('user not found.');
+            expect(response.body.message).toBe('server error.');
             expect(User.findOne).toHaveBeenCalledWith({ _id: mockUserId.toString() });
         });
     });
