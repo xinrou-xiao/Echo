@@ -5,6 +5,7 @@ import { HomePlaceholder } from './pages/home-placeholder/home-placeholder';
 import { MatchPage } from './pages/match/match';
 import { ProfilePage } from './pages/profile/profile';
 import { ChatPage } from './pages/chat/chat';
+import { ViewProfilePage } from './pages/view_profile/view_profile';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,11 @@ export const routes: Routes = [
     path: 'profile',
     component: ProfilePage,
     title: 'Echo · Complete Your Profile'
+  },
+  {
+     path: 'view_profile/:id', 
+     component: ViewProfilePage, 
+     title: 'Echo · Profile' 
   },
   {
     path: 'match',
