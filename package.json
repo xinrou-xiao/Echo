@@ -1,13 +1,13 @@
 {
   "name": "echo",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd server && npm run dev",
     "dev:frontend": "cd client && npm start",
     "install:all": "npm install && cd server && npm install && cd ../client && npm install",
-    "start": "npm run dev"
+    "start": "node server/server.js"
   },
   "keywords": [],
   "author": "",

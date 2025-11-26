@@ -9,7 +9,7 @@ const { DailyMatchingScheduler } = require('./cron/dailyMatch');
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 const app = express();
-const PORT = process.env.API_SERVER_PORT || 3000;
+const PORT = process.env.PROD_PORT || 8080;
 
 app.use(cors());
 app.use(express.json());
@@ -34,6 +34,13 @@ app.use(
     customCss: '.swagger-ui .topbar { display: none }'
   })
 );
+
+const distFolder = path.join(__dirname, '/dist/client/browser');
+app.use(express.static(distFolder));
+
+app.get(/^(?!\/api).*/, (req, res) => {
+  res.sendFile(path.join(distFolder, 'index.html'));
+});
 
 if (process.env.NODE_ENV !== 'test') {
   mongoose
