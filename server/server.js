@@ -1,10 +1,11 @@
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const { specs, swaggerUi } = require('./swagger');
 const { DailyMatchingScheduler } = require('./cron/dailyMatch');
+
 
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
@@ -44,9 +45,9 @@ app.get(/^(?!\/api).*/, (req, res) => {
 
 if (process.env.NODE_ENV !== 'test') {
   mongoose
-    .connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/echoDB')
+    .connect(process.env.MONGO_URI || 'mongodb+srv://echo:echo_admin@cluster0.pastawp.mongodb.net/echoDB?appName=Cluster0')
     .then(() => {
-      console.log('Mongo connected');
+      console.log(`Mongo connected on ${process.env.MONGO_URI || 'mongodb+srv://echo:echo_admin@cluster0.pastawp.mongodb.net/echoDB?appName=Cluster0'}`);
       DailyMatchingScheduler.init();
       app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);

@@ -60,6 +60,10 @@ export class ChatPage {
     }
   }
 
+  protected goToProfile(id: string): void {
+    void this.router.navigate(['/view_profile', id]);
+  }
+
   ngAfterViewChecked() {
     if (this.isInitialLoad) {
       this.scrollToBottom();
@@ -220,7 +224,7 @@ export class ChatPage {
       id: Date.now().toString(),
       from: 'me',
       text,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      timestamp: new Date().toISOString().slice(0, 16).replace('T', ' ')
     };
     thread.messages = [...thread.messages, newMessage];
     const contact = this.contacts.find(c => c.id === contactId);

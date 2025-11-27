@@ -162,7 +162,7 @@ export class AuthService {
         photoURL: firebaseUser.photoURL
       };
       const response = await firstValueFrom(
-        this.http.post<VerifyUserResponse>('http://localhost:3000/api/auth/verify_user', userData)
+        this.http.post<VerifyUserResponse>(`${environment.apiUrl}/auth/verify_user`, userData)
       );
       const isNewUser = this.normalizeIsNewUser(response?.isNewUser);
       const storedUser: StoredUser = {

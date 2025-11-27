@@ -25,16 +25,27 @@ export class ViewProfilePage {
 
   menuOpen = false;
 
-  async ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id') || '';
+  ngOnInit() {
+    this.loadProfileData();
+
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id') || '';
+      this.loadProfileData(id);
+    });
+  }
+
+  async loadProfileData(id?: string) {
+    const profileId = id || this.route.snapshot.paramMap.get('id') || '';
     const me = this.auth.profile();
 
-    this.isOwner.set(me?._id === id);
+    this.isOwner.set(me?._id === profileId);
+    this.loading.set(true);
+    this.error.set(null);
 
     try {
       const res = await this.http
         .get<{ success: boolean; data?: any; message?: string }>(
-          `${environment.apiUrl}/user/${id}`
+          `${environment.apiUrl}/user/${profileId}`
         )
         .toPromise();
 
@@ -83,7 +94,7 @@ export class ViewProfilePage {
     this.menuOpen = !this.menuOpen;
   }
 
-  
+
   onUpdateProfile(): void {
     this.menuOpen = false;
     this.goEdit();
