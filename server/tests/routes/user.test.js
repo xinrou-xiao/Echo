@@ -253,20 +253,20 @@ describe('User api routes', () => {
             expect(response.body.message).toContain('user do not exist');
             expect(User.findOneAndUpdate).not.toHaveBeenCalled();
         });
-    });
 
-    it('should return 500 on DB error', async () => {
-        const mockUserId = new mongoose.Types.ObjectId();
-        const updateData = { name: 'New Name' };
+        it('should return 500 on DB error', async () => {
+            const mockUserId = new mongoose.Types.ObjectId();
+            const updateData = { name: 'New Name' };
 
-        User.exists.mockRejectedValue(new Error('DB error'));
+            User.exists.mockRejectedValue(new Error('DB error'));
 
-        const response = await request(app)
-            .put(`/api/user/${mockUserId}`)
-            .send(updateData)
-            .expect(500);
+            const response = await request(app)
+                .put(`/api/user/${mockUserId}`)
+                .send(updateData)
+                .expect(500);
 
-        expect(response.body.success).toBe(false);
-        expect(response.body.message).toBe('server error.');
+            expect(response.body.success).toBe(false);
+            expect(response.body.message).toBe('server error.');
+        });
     });
 })
