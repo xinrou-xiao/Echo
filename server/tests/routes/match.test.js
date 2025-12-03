@@ -453,7 +453,7 @@ describe('Match api routes', () => {
         });
     });
 
-    describe.only('Get /api/match/:_id', () => {
+    describe('Get /api/match/:_id', () => {
         it('should return 500 on DB error', async () => {
             User.findOne.mockRejectedValue(new Error("DB error"));
 

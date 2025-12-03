@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { NgClass, NgIf } from '@angular/common';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-auth-page',
@@ -9,6 +10,10 @@ import { NgClass, NgIf } from '@angular/common';
   styleUrl: './auth.css'
 })
 export class AuthPage {
+  constructor(
+    protected readonly auth: AuthService
+  ) { }
+
   protected activeTab = signal<'login' | 'register'>('login');
 
   protected switchTab(tab: 'login' | 'register'): void {
@@ -17,5 +22,13 @@ export class AuthPage {
 
   protected isActive(tab: 'login' | 'register'): boolean {
     return this.activeTab() === tab;
+  }
+
+  protected async login(): Promise<void> {
+    try {
+      await this.auth.loginWithGoogle();
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

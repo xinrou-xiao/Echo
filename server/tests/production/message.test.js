@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const baseUrl = 'https://echoproject-hvchcufahxb3bbh7.canadacentral-01.azurewebsites.net';
 
 describe('User api routes (Azure production)', () => {
-    describe('Post /api/message/:_id', () => {
+    describe('Post /api/message/', () => {
         it('should get user data by id', async () => {
             const senderId = '69257e2861c390622cbdfd5e';
             const receiverId = '6927dae664b3b395685fd996';
@@ -25,7 +25,7 @@ describe('User api routes (Azure production)', () => {
         });
     });
 
-    describe('Get /api/user/:_id', () => {
+    describe('Get /api/user/', () => {
         it('should return 404', async () => {
             const senderId = new mongoose.Types.ObjectId();
             const receiverId = '6927dae664b3b395685fd996';
@@ -45,7 +45,7 @@ describe('User api routes (Azure production)', () => {
         });
     });
 
-    describe('Get /api/user/:_id', () => {
+    describe('Get /api/user/', () => {
         it('should return 500 on ObjectId wrong format', async () => {
             const senderId = '123';
             const receiverId = '6927dae664b3b395685fd996';
