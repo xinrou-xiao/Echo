@@ -138,7 +138,7 @@
         <label class="field">
           <span class="field-label">Height</span>
           <div class="input-group mb-3">
-            <input type="number" class="form-control" formControlName="height" aria-label="Height" />
+            <input type="number" class="form-control" formControlName="height" aria-label="Height" min="1" />
             <span class="input-group-text">cm</span>
           </div>
           <span class="error" *ngIf="isInvalid('height')">Please select a height.</span>
@@ -147,7 +147,7 @@
         <label class="field">
           <span class="field-label">Weight</span>
           <div class="input-group mb-3">
-            <input type="number" class="form-control" formControlName="weight" aria-label="Weight">
+            <input type="number" class="form-control" formControlName="weight" aria-label="Weight" min="1">
             <span class="input-group-text">kg</span>
           </div>
           <span class="error" *ngIf="isInvalid('weight')">Please select a weight.</span>
