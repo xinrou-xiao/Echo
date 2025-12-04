@@ -4,9 +4,9 @@ const baseUrl = 'https://echoproject-hvchcufahxb3bbh7.canadacentral-01.azurewebs
 
 describe('User api routes (Azure production)', () => {
     describe('Post /api/message/', () => {
-        it('should get user data by id', async () => {
+        it('should send message a message between given two users', async () => {
             const senderId = '69257e2861c390622cbdfd5e';
-            const receiverId = '6927dae664b3b395685fd996';
+            const receiverId = '6927d9726f02b3a5d34e1fb9';
             const content = `test:${new Date().toISOString()}`;
 
             const response = await request(baseUrl)

@@ -39,15 +39,16 @@ describe('User api routes (Azure production)', () => {
     });
 
     describe('Get /api/user/friend-list/:_id', () => {
-        it('should get user data by id', async () => {
+        it('should get user friends data by id', async () => {
             const userId = '69257e2861c390622cbdfd5e';
 
             const response = await request(baseUrl).get(`/api/user/friend-list/${userId}`).expect(200);
 
             expect(response.body.success).toBe(true);
-            expect(response.body.data).toHaveLength(2);
-            expect(response.body.data[0]._id).toBe('6927dae664b3b395685fd996');
-            expect(response.body.data[1]._id).toBe('6927dacb64b3b395685fd942');
+            expect(response.body.data).toHaveLength(3);
+            expect(response.body.data[0]._id).toBe('6927d9726f02b3a5d34e1fb9');
+            expect(response.body.data[1]._id).toBe('6927dae664b3b395685fd996');
+            expect(response.body.data[2]._id).toBe('6927dacb64b3b395685fd942');
         });
     });
 
