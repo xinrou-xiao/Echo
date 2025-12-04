@@ -36,7 +36,7 @@
             <img class="chat-header-avatar" [src]="contact.avatar" [alt]="contact.name" />
             <h3 class="chat-header-name h5 mb-0">{{ contact.name }}</h3>
           </div>
-          <button type="button" class="btn chat-action-button">View Profile</button>
+          <button type="button" class="btn chat-action-button" (click)="goToProfile(contact.id)">View Profile</button>
         </header>
 
         <div #chatMessages id="chatMessages" (scroll)="onScroll($event)" class="chat-messages card-body">

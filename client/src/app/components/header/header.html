@@ -11,7 +11,7 @@
 
     <div class="nav-actions" *ngIf="auth.user() as user; else loginButton">
 
-      <!-- if login -->
+
       <div class="dropdown">
         <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
           {{ auth.profile()?.name || user.displayName || user.email }}
@@ -36,7 +36,7 @@
 
     <ng-template #loginButton>
       <div class="nav-actions">
-        <!-- if logout -->
+    
         <button
           class="btn btn-outline-light"
           data-login-button

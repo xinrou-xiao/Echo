@@ -171,10 +171,7 @@ export class AuthService {
         photoURL: firebaseUser.photoURL
       };
       const response = await firstValueFrom(
-        //After a Google sign-in, we call verifyUserWithBackend. 
-        //Here we send a POST request to /api/auth/verify_user with the user’s uid, email, name, and photoURL.
-        /** 2*/
-        this.http.post<VerifyUserResponse>('http://localhost:3000/api/auth/verify_user', userData)
+        this.http.post<VerifyUserResponse>(`${environment.apiUrl}/auth/verify_user`, userData)
       );
       const isNewUser = this.normalizeIsNewUser(response?.isNewUser);
       const storedUser: StoredUser = {

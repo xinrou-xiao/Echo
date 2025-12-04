@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -27,6 +28,7 @@ export class ProfilePage {
   private readonly fb = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   private readonly http = inject(HttpClient);
+  private readonly router = inject(Router);  
   private uploadedObjectUrl: string | null = null;
 
   protected readonly isUploading = signal(false);
@@ -521,6 +523,12 @@ export class ProfilePage {
       const profilePayload = this.prepareProfilePayload(profilePictureUrl);
       await this.submitProfileData(user._id, profilePayload);
 
+      this.showSuccess.set(true);
+
+      setTimeout(() => {
+      this.showSuccess.set(false);
+      this.router.navigate(['/view_profile', user._id]);
+    }, 1000);
     } catch (error) {
       console.error('Submit error:', error);
       this.uploadError.set('Failed to upload profile picture');
@@ -618,25 +626,24 @@ export class ProfilePage {
     };
   }
 
-  private submitProfileData(userId: string, profileData: any): Promise<void> {
-    return new Promise((resolve, reject) => {
-      this.http.put<ProfileResponse>(`${environment.apiUrl}/user/${userId}`, profileData)
-        .subscribe({
-          next: (response) => {
-            if (response.success) {
-              this.showSuccess.set(true);
-              setTimeout(() => this.showSuccess.set(false), 3000);
-              resolve();
-            } else {
-              reject(new Error(response.message || 'Save failed'));
-            }
-          },
-          error: (error) => {
-            reject(error);
+private submitProfileData(userId: string, profileData: any): Promise<void> {
+  return new Promise((resolve, reject) => {
+    this.http
+      .put<ProfileResponse>(`${environment.apiUrl}/user/${userId}`, profileData)
+      .subscribe({
+        next: (response) => {
+          if (response.success) {
+            resolve();
+          } else {
+            reject(new Error(response.message || 'Save failed'));
           }
-        });
-    });
-  }
+        },
+        error: (error) => {
+          reject(error);
+        }
+      });
+  });
+}
 
   protected isInterestSelected(interest: string): boolean {
     const currentInterests = this.profileForm.get('interests')?.value || [];
