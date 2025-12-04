@@ -47,7 +47,7 @@ if (process.env.NODE_ENV !== 'test') {
   mongoose
     .connect(process.env.MONGO_URI || 'mongodb+srv://echo:echo_admin@cluster0.pastawp.mongodb.net/echoDB?appName=Cluster0')
     .then(() => {
-      console.log(`Mongo connected on ${process.env.MONGO_URI || 'mongodb+srv://echo:echo_admin@cluster0.pastawp.mongodb.net/echoDB?appName=Cluster0'}`);
+      console.log(`Mongo connected`);
       DailyMatchingScheduler.init();
       app.listen(PORT, () => {
         console.log(`Server running at http://localhost:${PORT}`);
